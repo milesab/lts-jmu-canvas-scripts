@@ -1,0 +1,70 @@
+import csv
+import config
+
+
+# Check to see if course exists
+def course_check(cid,all_courses):
+    status = False
+    for course in all_courses:
+        if cid == course:
+            status = True
+    return status
+
+
+# Check to see if course,section exists
+def section_check(cid,sid,all_sections):
+    status = False
+    for section in all_sections:
+        if cid == section[0] and sid == section[1]:
+            status = True
+    return status
+
+
+# Get list of courses
+def get_courses():
+    courses_list = []
+    courses = open(config.easel_home + 'data/export/courses.csv', 'r')
+    reader = csv.DictReader(courses, delimiter=',', quotechar='"')
+    for row in reader:
+        ccid = int(row["canvas_course_id"])
+        cid = row["course_id"]
+        status = row["status"]
+        if status == "active":
+            courses_list.append( cid )
+    courses.close()
+    return courses_list
+
+
+# Get list of course sections
+def get_sections():
+    sections_list = []
+    sections = open(config.easel_home + 'data/export/sections.csv', 'r')
+    reader = csv.DictReader(sections, delimiter=',', quotechar='"')
+    for row in reader:
+        ccid = int(row["canvas_course_id"])
+        cid = row["course_id"]
+        sid = row["section_id"]
+        status = row["status"]
+        if status == "active":
+            sections_list.append( (cid, sid) )
+    sections.close()
+    return sections_list
+
+
+# Get enrollments for a course
+def get_enrollments(cid,sid):
+    enrollments_list = []
+    enrollments = open(config.easel_home + 'data/export/enrollments.csv', 'r')
+    reader = csv.DictReader(enrollments, delimiter=',', quotechar='"')
+    for row in reader:
+        if row["status"] == "active" and cid == row["course_id"] and \
+           sid == row["section_id"] and row["user_id"]:
+            enrollments_list.append((row["user_id"],row["role"]))
+    enrollments.close()
+    return enrollments_list
+
+
+# Enrollment Diff
+def diff_enroll(first,second):
+    second = set(second)
+    return [enroll for enroll in first if enroll not in second]
