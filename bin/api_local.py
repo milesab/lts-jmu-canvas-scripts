@@ -4,19 +4,13 @@ import config
 
 # Check to see if course exists
 def course_check(cid,all_courses):
-    status = False
-    for course in all_courses:
-        if cid == course:
-            status = True
+    status = cid in all_courses
     return status
 
 
 # Check to see if course,section exists
 def section_check(cid,sid,all_sections):
-    status = False
-    for section in all_sections:
-        if cid == section[0] and sid == section[1]:
-            status = True
+    status = (cid,sid) in all_sections
     return status
 
 

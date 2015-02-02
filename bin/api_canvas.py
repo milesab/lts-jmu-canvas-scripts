@@ -3,6 +3,11 @@ import urllib, urllib2, MultipartPostHandler, json
 import config
 
 
+# Break up data for multiple API calls
+def chunks(seq, size):
+    return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
+
+
 # Return the status of a job - job_arg can be job ID or a path to a file containing a job ID
 def job_status(job_arg,endpoint_arg):
     job = str(job_arg)
@@ -108,11 +113,6 @@ def get_students(course_id):
     return json.loads(student_response)
 
 
-# Break up student_ids for multiple API calls
-def chunks(seq, size):
-    return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
-
-
 # Get grades for the course
 def get_grades(student_data,course_id):
     grades = []
@@ -126,4 +126,3 @@ def get_grades(student_data,course_id):
         grade_response = urllib2.urlopen(req).read().strip()
         grades = grades + (json.loads(grade_response))
     return grades
-
