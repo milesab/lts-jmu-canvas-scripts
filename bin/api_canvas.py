@@ -1,6 +1,7 @@
 import os, fnmatch, zipfile
 import urllib, urllib2, MultipartPostHandler, json
-import config
+import api_local
+config = api_local.get_config()
 
 
 # Break up data for multiple API calls
@@ -17,14 +18,14 @@ def job_status(job_arg,endpoint_arg):
         job_id = int(open(job, 'r').read().strip())
 
     if endpoint_arg == 'import':
-        endpoint = 'accounts/%d/sis_imports/%d.json?access_token=%s' % (config.account_id,job_id,config.access_token)
+        endpoint = 'accounts/%d/sis_imports/%d.json?access_token=%s' % (config['account_id'],job_id,config['access_token'])
     elif endpoint_arg == 'export':
-        endpoint = 'accounts/%d/reports/provisioning_csv/%d?access_token=%s' % (config.account_id,job_id,config.access_token)
+        endpoint = 'accounts/%d/reports/provisioning_csv/%d?access_token=%s' % (config['account_id'],job_id,config['access_token'])
     else:
         endpoint = endpoint_arg
 
     if job_id:
-        response = urllib2.urlopen(config.base_url + endpoint).read().strip()
+        response = urllib2.urlopen(config['base_url'] + endpoint).read().strip()
         return json.loads(response)
 
 
@@ -55,14 +56,14 @@ def import_zip(import_file,import_dir):
 def import_submit(import_file,import_id_file):
     if os.path.isfile(import_file):
         params = {'attachment':open(import_file,'rb'),
-            'access_token':config.access_token,
+            'access_token':config['access_token'],
             'import_type':'instructure_csv',
             }
 
         # MultipartPostHandler module is needed to post the CSV zip file
         opener = urllib2.build_opener(MultipartPostHandler.MultipartPostHandler)
         urllib2.install_opener(opener)
-        req = urllib2.Request(config.base_url + 'accounts/%s/sis_imports.json' % config.account_id,params)
+        req = urllib2.Request(config['base_url'] + 'accounts/%s/sis_imports.json' % config['account_id'],params)
         response = urllib2.urlopen(req).read().strip()
         response_data = json.loads(response)
         import_id = response_data['id']
@@ -75,10 +76,10 @@ def import_submit(import_file,import_id_file):
 
 # Submit export request to canvas using the provisioning report API
 def export_submit(export_id_file):
-    endpoint = config.base_url + 'accounts/%d/reports/provisioning_csv' % config.account_id
+    endpoint = config['base_url'] + 'accounts/%d/reports/provisioning_csv' % config['account_id']
     params = {"parameters": {'terms':'1','courses':'1','sections':'1','enrollments':'1','users':'1','xlist':'1'}}
     params = json.dumps(params)
-    request = urllib2.Request(endpoint,params,{'Content-type': 'application/json','Authorization':'Bearer %s' % config.access_token})
+    request = urllib2.Request(endpoint,params,{'Content-type': 'application/json','Authorization':'Bearer %s' % config['access_token']})
     response = urllib2.urlopen(request).read().strip()
     response_data = json.loads(response)
     export_id = response_data['id']
@@ -91,13 +92,13 @@ def export_submit(export_id_file):
 
 # Retrieve export and unzip it to the export directory
 def export_download(file_url,export_file):
-    export_request = urllib2.Request(file_url,None,{'Authorization':'Bearer %s' % config.access_token})
+    export_request = urllib2.Request(file_url,None,{'Authorization':'Bearer %s' % config['access_token']})
     export_data = urllib2.urlopen(file_url)
     with open(export_file, "wb+") as dl_file:
         dl_file.write(export_data.read())
         zip_file = zipfile.ZipFile(dl_file, "r")
         for subfile in zip_file.namelist():
-            zip_file.extract(subfile,config.easel_home + 'data/export/')
+            zip_file.extract(subfile,config['export_dir'])
         dl_file.close()
     try:
         os.remove(export_file)
@@ -107,8 +108,8 @@ def export_download(file_url,export_file):
 
 # Get list of students in a course
 def get_students(course_id):
-    students_endpoint = config.base_url + 'courses/%d/students' % course_id
-    student_request = urllib2.Request(students_endpoint,None,{'Authorization':'Bearer %s' % config.access_token})
+    students_endpoint = config['base_url'] + 'courses/%d/students' % course_id
+    student_request = urllib2.Request(students_endpoint,None,{'Authorization':'Bearer %s' % config['access_token']})
     student_response = urllib2.urlopen(student_request).read().strip()
     return json.loads(student_response)
 
@@ -117,12 +118,12 @@ def get_students(course_id):
 def get_grades(student_data,course_id):
     grades = []
     student_ids = [s['id'] for s in student_data]
-    submissions_endpoint = config.base_url + 'courses/%d/students/submissions' % course_id
+    submissions_endpoint = config['base_url'] + 'courses/%d/students/submissions' % course_id
     for group in chunks(student_ids, 50):
         submission_params = [ ('grouped',1)]
         submission_params.extend([('student_ids[]',s) for s in group])
         submission_params = urllib.urlencode(submission_params)
-        req = urllib2.Request(submissions_endpoint + "?" +submission_params,None,{'Authorization':'Bearer %s' % config.access_token})
+        req = urllib2.Request(submissions_endpoint + "?" +submission_params,None,{'Authorization':'Bearer %s' % config['access_token']})
         grade_response = urllib2.urlopen(req).read().strip()
         grades = grades + (json.loads(grade_response))
     return grades

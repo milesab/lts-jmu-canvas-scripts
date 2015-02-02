@@ -1,5 +1,5 @@
 .DS_Store
 *.pyc
-bin/config.py
-apps/feeds/dfconfig.pm
+conf/settings.conf
 test.py
+test.pl

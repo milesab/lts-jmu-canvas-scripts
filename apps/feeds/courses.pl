@@ -1,10 +1,9 @@
-use CGI;
 #use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use CGI;
 use strict;
 use warnings;
 use DFconfig;
-
-my %config = getconfig();
+my %config = DFconfig::get_config();
 
 my $cgi = CGI->new();
 
@@ -19,7 +18,7 @@ if ($semester =~ /(SP|SM|FA)[0-9][0-9]/) {
 	$semester =~ s!(SP|SM|FA)!$termname{$1} || $1!e;
 	}
 
-my %terms = readfile("$config{dir}terms.csv");
+my %terms = readfile("$config{export_dir}terms.csv");
 my @terms;
 my $sem;
 
@@ -32,10 +31,10 @@ for (my $i = 0; $i < $termcount; $i++) {
 	}
 }
 
-my %courses = readfile("$config{dir}courses.csv");
+my %courses = readfile("$config{export_dir}courses.csv");
 
 my @xlist;
-my %xlist = readfile("$config{dir}xlist.csv");
+my %xlist = readfile("$config{export_dir}xlist.csv");
 my $xlist_count = scalar(@{$xlist{'xlist_course_id'}});
 my %xlist_index;
 for (my $i = 0; $i < $xlist_count; $i++) {

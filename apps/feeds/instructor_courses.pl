@@ -1,9 +1,8 @@
-use CGI;
 #use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use CGI;
 use strict;
 use DFconfig;
-
-my %config = getconfig();
+my %config = DFconfig::get_config();
 
 my $cgi = CGI->new();
 my $instructors = $cgi->param('id');
@@ -11,7 +10,7 @@ my @instructors = split(/,/,$instructors);
 
 my @output;
 
-my %enrollment = readfile("$config{dir}enrollments.csv");
+my %enrollment = readfile("$config{export_dir}enrollments.csv");
 my $enrollments = scalar(@{$enrollment{'course_id'}});
 for (my $i = 0; $i < $enrollments; $i++) {
 	my $userid = @{$enrollment{'user_id'}}[$i];

@@ -1,9 +1,10 @@
 import os, datetime, time
-import config, api_canvas
+import api_local, api_canvas
+config = api_local.get_config()
 
 
-export_file = config.easel_home + 'data/temp/sisexport.zip'
-export_id_file = config.easel_home + 'data/temp/sisexport_id.txt'
+export_file = config['easel_home'] + 'data/temp/sisexport.zip'
+export_id_file = config['easel_home'] + 'data/temp/sisexport_id.txt'
 
 
 # Generate new export
@@ -23,7 +24,7 @@ def generate_export():
 
 # Check if export has been updated in the last 5 hours
 def export_time():
-    t = os.path.getmtime(config.easel_home + 'data/export/')
+    t = os.path.getmtime(config['export_dir'])
     if (datetime.datetime.today() - datetime.datetime.fromtimestamp(t)) < datetime.timedelta(hours=0):
         return False
     else:

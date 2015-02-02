@@ -1,5 +1,15 @@
 import csv
-import config
+
+
+def get_config():
+    config = {}
+    config_file = open("../conf/settings.conf")
+    for line in config_file:
+        line = line.strip()
+        if line and line[0] is not "#" and line[-1] is not "=":
+            key,val = line.rsplit("=",1)
+            config[key.strip()] = val.strip()
+    return config
 
 
 # Check to see if course exists
@@ -17,7 +27,7 @@ def section_check(cid,sid,all_sections):
 # Get list of courses
 def get_courses():
     courses_list = []
-    courses = open(config.easel_home + 'data/export/courses.csv', 'r')
+    courses = open(config['export_dir'], 'r')
     reader = csv.DictReader(courses, delimiter=',', quotechar='"')
     for row in reader:
         ccid = int(row["canvas_course_id"])
@@ -32,7 +42,7 @@ def get_courses():
 # Get list of course sections
 def get_sections():
     sections_list = []
-    sections = open(config.easel_home + 'data/export/sections.csv', 'r')
+    sections = open(config['export_dir'] + 'sections.csv', 'r')
     reader = csv.DictReader(sections, delimiter=',', quotechar='"')
     for row in reader:
         ccid = int(row["canvas_course_id"])
@@ -48,7 +58,7 @@ def get_sections():
 # Get enrollments for a course
 def get_enrollments(cid,sid):
     enrollments_list = []
-    enrollments = open(config.easel_home + 'data/export/enrollments.csv', 'r')
+    enrollments = open(config['export_dir'] + 'enrollments.csv', 'r')
     reader = csv.DictReader(enrollments, delimiter=',', quotechar='"')
     for row in reader:
         if row["status"] == "active" and cid == row["course_id"] and \

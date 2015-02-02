@@ -5,12 +5,13 @@ try:
     from cStringIO import StringIO
 except:
     from StringIO import StringIO
-import config, api_canvas, api_local
+import api_local, api_canvas
+config = api_local.get_config()
 
 
-import_file = config.easel_home + 'data/temp/course_mirror.zip'
-import_id_file = config.easel_home + 'data/temp/course_mirror_id.txt'
-temp_dir = config.easel_home + 'data/temp/course_mirror/'
+import_file = config['easel_home'] + 'data/temp/course_mirror.zip'
+import_id_file = config['easel_home'] + 'data/temp/course_mirror_id.txt'
+temp_dir = config['easel_home'] + 'data/temp/course_mirror/'
 
 
 # Clear temp directory
@@ -59,7 +60,7 @@ if __name__ == '__main__':
     enroll_string = StringIO()
     enroll_string.write("course_id,user_id,role,section_id,status\n")
 
-    mirror_file = open(config.easel_home + 'data/add_enroll/course_mirror.csv', 'r')
+    mirror_file = open(config['easel_home'] + 'data/add_enroll/course_mirror.csv', 'r')
     mirror_lines = [line for line in mirror_file if line.strip()]
     mirror_file.close()
     mirror_lines.sort()

@@ -1,23 +1,22 @@
-use CGI;
 #use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+use CGI;
 use strict;
 use DFconfig;
-
-my %config = getconfig();
+my %config = DFconfig::get_config();
 
 my $cgi = CGI->new();
 my $courseids = $cgi->param('id');
 $courseids =~ s/default//ig; # cut off 'default' string appended by LON CAPA
 my @courses = split(/,/,$courseids);
 
-my %users = readfile("$config{dir}users.csv");
+my %users = readfile("$config{export_dir}users.csv");
 my $users_count = scalar(@{$users{'canvas_user_id'}});
 my %users_index;
 for (my $i = 0; $i < $users_count; $i++) {
 	$users_index{@{$users{'canvas_user_id'}}[$i]} = $i;
 }
 
-my %xlist = readfile("$config{dir}xlist.csv");
+my %xlist = readfile("$config{export_dir}xlist.csv");
 my $xlist_count = scalar(@{$xlist{'xlist_course_id'}});
 my %xlist_index;
 for (my $i = 0; $i < $xlist_count; $i++) {
@@ -31,7 +30,7 @@ for (my $i = 0; $i < $xlist_count; $i++) {
 
 my @output;
 
-my %enrollment = readfile("$config{dir}enrollments.csv");
+my %enrollment = readfile("$config{export_dir}enrollments.csv");
 my $enrollments = scalar(@{$enrollment{'course_id'}});
 for (my $i = 0; $i < $enrollments; $i++) {
 	my $courseid = @{$enrollment{'course_id'}}[$i];
