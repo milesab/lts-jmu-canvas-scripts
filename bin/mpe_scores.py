@@ -16,10 +16,10 @@ ltz = pytz.timezone(config['local_timezone'])
 
 # Pull time from filename
 def date_from_filename(filename):
-	m = re.search(r"(?P<year>\d{4})(?P<month>\d{2})(?P<day>\d{2})-(?P<hour>\d{2})(?P<minute>\d{2})(?P<second>\d{2})", filename)
-	if not m:
-		return None
-	return datetime(int(m.group('year')), int(m.group('month')), int(m.group('day')),
+    m = re.search(r"(?P<year>\d{4})(?P<month>\d{2})(?P<day>\d{2})-(?P<hour>\d{2})(?P<minute>\d{2})(?P<second>\d{2})", filename)
+    if not m:
+        return None
+    return datetime(int(m.group('year')), int(m.group('month')), int(m.group('day')),
                     int(m.group('hour')), int(m.group('minute')), int(m.group('second')))
 
 
@@ -27,11 +27,11 @@ def date_from_filename(filename):
 def last_score():
     scorefiles = sorted([ f for f in os.listdir(config['easel_home'] + 'data/mpe/') if f.startswith('scores-')])
     if scorefiles:
-    	lastscore = ltz.localize(date_from_filename('%s' % scorefiles[-1],))
+        lastscore = ltz.localize(date_from_filename('%s' % scorefiles[-1],))
         return lastscore
     else:
-    	logging.info('No Score files found, exiting')
-    	exit(1)
+        logging.info('No Score files found, exiting')
+        exit(1)
 
 
 # Determine timestamp of last mpe enrollment run
@@ -69,9 +69,9 @@ def create_scorefile():
                             p3score, p3time = qscore, qtime
                         if quiz == config['mpe_quiz4']:
                             p4score, p4time = qscore, qtime
-	if not None in (p1score, p2score, p3score, p4score):
-	    gmt_timestamp = datetime.strptime(max(p1time, p2time, p3time, p4time), '%Y-%m-%dT%H:%M:%SZ')
-	    mpe_timestamp = gmt.localize(gmt_timestamp).astimezone(ltz)
+    if not None in (p1score, p2score, p3score, p4score):
+        gmt_timestamp = datetime.strptime(max(p1time, p2time, p3time, p4time), '%Y-%m-%dT%H:%M:%SZ')
+        mpe_timestamp = gmt.localize(gmt_timestamp).astimezone(ltz)
             if mpe_timestamp > lastscore:
                 if student_id in open(scores_file).read():
                         logging.info('Skipping duplicate score - %s' % student_id)
