@@ -2,11 +2,10 @@
 use CGI;
 use strict;
 use DFconfig;
-my %config = DFconfig::get_config();
 
+my %config = DFconfig::get_config();
 my $cgi = CGI->new();
 open(LOG, ">>$config{log_dir}");
-
 my $courseids = $cgi->param('id');
 $courseids =~ s/default//ig; # cut off 'default' that is appended by LON CAPA
 my @courses = split(/,/,$courseids);

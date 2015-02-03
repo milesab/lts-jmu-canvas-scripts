@@ -2,8 +2,8 @@
 use CGI;
 use strict;
 use DFconfig;
-my %config = DFconfig::get_config();
 
+my %config = DFconfig::get_config();
 my $cgi = CGI->new();
 my $instructors = $cgi->param('id');
 my @instructors = split(/,/,$instructors);

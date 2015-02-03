@@ -6,6 +6,7 @@ try:
 except:
     from StringIO import StringIO
 import api_local, api_canvas
+
 config = api_local.get_config()
 
 

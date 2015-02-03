@@ -12,6 +12,7 @@ def get_config():
             key,val = line.rsplit("=",1)
             config[key.strip()] = val.strip()
     return config
+    
 config = get_config()
 
 

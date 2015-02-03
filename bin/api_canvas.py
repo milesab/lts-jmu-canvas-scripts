@@ -1,6 +1,7 @@
 import os, fnmatch, zipfile
 import urllib, urllib2, MultipartPostHandler, json
 import api_local
+
 config = api_local.get_config()
 
 
@@ -114,9 +115,9 @@ def get_students(course_id):
     return json.loads(student_response)
 
 
-# Get grades for the course
-def get_grades(student_data,course_id):
-    grades = []
+# Get scores for the course
+def get_scores(student_data,course_id):
+    scores = []
     student_ids = [s['id'] for s in student_data]
     submissions_endpoint = config['base_url'] + 'courses/%s/students/submissions' % course_id
     for group in chunks(student_ids, 50):
@@ -124,6 +125,6 @@ def get_grades(student_data,course_id):
         submission_params.extend([('student_ids[]',s) for s in group])
         submission_params = urllib.urlencode(submission_params)
         req = urllib2.Request(submissions_endpoint + "?" +submission_params,None,{'Authorization':'Bearer %s' % config['access_token']})
-        grade_response = urllib2.urlopen(req).read().strip()
-        grades = grades + (json.loads(grade_response))
-    return grades
+        score_response = urllib2.urlopen(req).read().strip()
+        scores = scores + (json.loads(score_response))
+    return scores

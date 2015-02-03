@@ -3,10 +3,9 @@ use CGI;
 use strict;
 use warnings;
 use DFconfig;
+
 my %config = DFconfig::get_config();
-
 my $cgi = CGI->new();
-
 my $semester = $cgi->param('sem') || 'Spring Semester 2015';
 
 if ($semester =~ /(SP|SM|FA)[0-9][0-9]/) {

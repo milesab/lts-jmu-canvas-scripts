@@ -2,8 +2,8 @@
 use CGI;
 use strict;
 use DFconfig;
-my %config = DFconfig::get_config();
 
+my %config = DFconfig::get_config();
 my $cgi = CGI->new();
 my $courseids = $cgi->param('id');
 $courseids =~ s/default//ig; # cut off 'default' string appended by LON CAPA
