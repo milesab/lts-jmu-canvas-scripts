@@ -44,4 +44,4 @@ if __name__ == '__main__':
     api_canvas.import_clear(import_file,import_id_file)
     enrollment_changes()
     api_canvas.import_zip(import_file,config['import_dir'])
-    api_canvas.import_submit(import_file,import_id_file)
+    #api_canvas.import_submit(import_file,import_id_file)

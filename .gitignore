@@ -1,5 +1,5 @@
 .DS_Store
 *.pyc
 conf/settings.conf
-test.py
-test.pl
+apps/feeds/test.pl
+bin/test.py

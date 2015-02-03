@@ -1,7 +1,9 @@
-import csv
-
+import os, csv
 
 def get_config():
+    abspath = os.path.abspath(__file__)
+    dname = os.path.dirname(abspath)
+    os.chdir(dname)
     config = {}
     config_file = open("../conf/settings.conf")
     for line in config_file:
@@ -10,6 +12,7 @@ def get_config():
             key,val = line.rsplit("=",1)
             config[key.strip()] = val.strip()
     return config
+config = get_config()
 
 
 # Check to see if course exists
@@ -27,7 +30,7 @@ def section_check(cid,sid,all_sections):
 # Get list of courses
 def get_courses():
     courses_list = []
-    courses = open(config['export_dir'], 'r')
+    courses = open(config['export_dir'] + 'courses.csv', 'r')
     reader = csv.DictReader(courses, delimiter=',', quotechar='"')
     for row in reader:
         ccid = int(row["canvas_course_id"])

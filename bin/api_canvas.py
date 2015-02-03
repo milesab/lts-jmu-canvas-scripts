@@ -18,9 +18,9 @@ def job_status(job_arg,endpoint_arg):
         job_id = int(open(job, 'r').read().strip())
 
     if endpoint_arg == 'import':
-        endpoint = 'accounts/%d/sis_imports/%d.json?access_token=%s' % (config['account_id'],job_id,config['access_token'])
+        endpoint = 'accounts/%s/sis_imports/%s.json?access_token=%s' % (config['account_id'],job_id,config['access_token'])
     elif endpoint_arg == 'export':
-        endpoint = 'accounts/%d/reports/provisioning_csv/%d?access_token=%s' % (config['account_id'],job_id,config['access_token'])
+        endpoint = 'accounts/%s/reports/provisioning_csv/%s?access_token=%s' % (config['account_id'],job_id,config['access_token'])
     else:
         endpoint = endpoint_arg
 
@@ -76,7 +76,7 @@ def import_submit(import_file,import_id_file):
 
 # Submit export request to canvas using the provisioning report API
 def export_submit(export_id_file):
-    endpoint = config['base_url'] + 'accounts/%d/reports/provisioning_csv' % config['account_id']
+    endpoint = config['base_url'] + 'accounts/%s/reports/provisioning_csv' % config['account_id']
     params = {"parameters": {'terms':'1','courses':'1','sections':'1','enrollments':'1','users':'1','xlist':'1'}}
     params = json.dumps(params)
     request = urllib2.Request(endpoint,params,{'Content-type': 'application/json','Authorization':'Bearer %s' % config['access_token']})
@@ -108,7 +108,7 @@ def export_download(file_url,export_file):
 
 # Get list of students in a course
 def get_students(course_id):
-    students_endpoint = config['base_url'] + 'courses/%d/students' % course_id
+    students_endpoint = config['base_url'] + 'courses/%s/students' % course_id
     student_request = urllib2.Request(students_endpoint,None,{'Authorization':'Bearer %s' % config['access_token']})
     student_response = urllib2.urlopen(student_request).read().strip()
     return json.loads(student_response)
@@ -118,7 +118,7 @@ def get_students(course_id):
 def get_grades(student_data,course_id):
     grades = []
     student_ids = [s['id'] for s in student_data]
-    submissions_endpoint = config['base_url'] + 'courses/%d/students/submissions' % course_id
+    submissions_endpoint = config['base_url'] + 'courses/%s/students/submissions' % course_id
     for group in chunks(student_ids, 50):
         submission_params = [ ('grouped',1)]
         submission_params.extend([('student_ids[]',s) for s in group])

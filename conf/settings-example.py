@@ -3,17 +3,17 @@ debug=0
 
 # Canvas
 account_id=12345
-access_token='<canvas access token generated via the canvas web interface>'
-base_url='https://canvas.university.edu/api/v1/'
+access_token=<canvas access token generated via the canvas web interface>
+base_url=https://canvas.university.edu/api/v1/
 
 # Local
-local_timezone='US/Eastern'
-smtp_server='smtp.university.edu'
-smtp_domain='university.edu'
-easel_home='/var/local/easel/'
-import_dir='/var/local/easel/data/import/'
-export_dir='/var/local/easel/data/export/'
-log_dir='/var/local/easel/easel/logs/'
+local_timezone=US/Eastern
+smtp_server=smtp.university.edu
+smtp_domain=university.edu
+easel_home=/usr/local/easel/
+import_dir=/usr/local/easel/data/import/
+export_dir=/usr/local/easel/data/export/
+log_dir=/usr/local/easel/easel/logs/
 
 # Math Placement Exam
 mpe_course_id=123450

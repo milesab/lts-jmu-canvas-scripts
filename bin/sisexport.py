@@ -1,5 +1,6 @@
 import os, datetime, time
 import api_local, api_canvas
+
 config = api_local.get_config()
 
 
@@ -25,7 +26,7 @@ def generate_export():
 # Check if export has been updated in the last 5 hours
 def export_time():
     t = os.path.getmtime(config['export_dir'])
-    if (datetime.datetime.today() - datetime.datetime.fromtimestamp(t)) < datetime.timedelta(hours=0):
+    if (datetime.datetime.today() - datetime.datetime.fromtimestamp(t)) < datetime.timedelta(hours=5):
         return False
     else:
         return True
