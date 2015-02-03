@@ -114,11 +114,11 @@ if __name__ == '__main__':
     publish_scorefile()
 
     # Save students data for troubleshooting
-    fout = open(config['log_dir'] + 'mpe_student_data.json', 'w')
+    fout = open(config['easel_home'] + 'data/temp/mpe_student_data.json', 'w')
     json.dump(student_data,fout)
     fout.close
 
     # Save grades data for troubleshooting
-    fout = open(config['log_dir'] + 'mpe_score_data.json', 'w')
+    fout = open(config['easel_home'] + 'data/temp/mpe_score_data.json', 'w')
     json.dump(score_data,fout)
     fout.close
