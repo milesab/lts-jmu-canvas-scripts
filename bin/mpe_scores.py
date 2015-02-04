@@ -72,17 +72,17 @@ def create_scorefile():
     if not None in (p1score, p2score, p3score, p4score):
         gmt_timestamp = datetime.strptime(max(p1time, p2time, p3time, p4time), '%Y-%m-%dT%H:%M:%SZ')
         mpe_timestamp = gmt.localize(gmt_timestamp).astimezone(ltz)
-            if mpe_timestamp > lastscore:
-                if student_id in open(scores_file).read():
-                        logging.info('Skipping duplicate score - %s' % student_id)
-                else:
-                        logging.info('Adding new score - %s' % student_id)
-                        calc_score = str(int(p1score) + int(p2score) + int(p3score)).zfill(4) + '00'
-                        calc_time = datetime.strptime(max(p1time, p2time, p3time), '%Y-%m-%dT%H:%M:%SZ').strftime('%m%d%Y')
-                        stat_score = str(int(p4score)).zfill(4) + '00'
-                        stat_time = datetime.strptime(p4time, '%Y-%m-%dT%H:%M:%SZ').strftime('%m%d%Y')
-                        file.write('%-11sMATHP      %s            CALC %s\n' % (student_id, calc_time, calc_score))
-                        file.write('%-11sMATHP      %s            STAT %s\n' % (student_id, stat_time, stat_score))
+        if mpe_timestamp > lastscore:
+            if student_id in open(scores_file).read():
+                    logging.info('Skipping duplicate score - %s' % student_id)
+            else:
+                    logging.info('Adding new score - %s' % student_id)
+                    calc_score = str(int(p1score) + int(p2score) + int(p3score)).zfill(4) + '00'
+                    calc_time = datetime.strptime(max(p1time, p2time, p3time), '%Y-%m-%dT%H:%M:%SZ').strftime('%m%d%Y')
+                    stat_score = str(int(p4score)).zfill(4) + '00'
+                    stat_time = datetime.strptime(p4time, '%Y-%m-%dT%H:%M:%SZ').strftime('%m%d%Y')
+                    file.write('%-11sMATHP      %s            CALC %s\n' % (student_id, calc_time, calc_score))
+                    file.write('%-11sMATHP      %s            STAT %s\n' % (student_id, stat_time, stat_score))
     file.close()
 
 
