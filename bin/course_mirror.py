@@ -99,4 +99,4 @@ if __name__ == '__main__':
     section_string.close()
 
     api_canvas.import_zip(import_file,temp_dir)
-    api_canvas.import_submit()
+    api_canvas.import_submit(import_file,import_id_file)
