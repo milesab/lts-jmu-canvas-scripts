@@ -25,9 +25,12 @@ def generate_export():
 
 # Check if export has been updated in the last 5 hours
 def export_time():
-    t = os.path.getmtime(config['export_dir'])
-    if (datetime.datetime.today() - datetime.datetime.fromtimestamp(t)) < datetime.timedelta(hours=5):
-        return False
+    if os.path.isfile(config['export_dir'] + 'courses.csv'):
+        t = os.path.getmtime(config['export_dir'] + 'courses.csv')
+        if (datetime.datetime.today() - datetime.datetime.fromtimestamp(t)) < datetime.timedelta(hours=5):
+            return False
+        else:
+            return True
     else:
         return True
 
