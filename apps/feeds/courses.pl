@@ -4,9 +4,16 @@ use strict;
 use warnings;
 use DFconfig;
 
+=pod
+
+Return a list of course IDs based on a specified term.  If no term is specified, default to most recent.
+
+=cut
+
+
 my %config = DFconfig::get_config();
 my $cgi = CGI->new();
-my $semester = $cgi->param('sem') || 'Spring Semester 2015';
+my $semester = $cgi->param('sem') || 'Default';
 
 if ($semester =~ /(SP|SM|FA)[0-9][0-9]/) {
     my %termname = (
@@ -18,16 +25,27 @@ if ($semester =~ /(SP|SM|FA)[0-9][0-9]/) {
     }
 
 my %terms = readfile("$config{export_dir}terms.csv");
-my @terms;
+my @term_ids;
 my $sem;
 
 my $termcount = scalar(@{$terms{'term_id'}});
-for (my $i = 0; $i < $termcount; $i++) {
+for (my $i = 0; $i < $termcount; $i++)
+{
     my $id = @{$terms{'term_id'}}[$i];
     my $name = @{$terms{'name'}}[$i];
-    if ($name ne "Default Term" && $name eq $semester) {
-        $sem = $id;
+    if ($name ne "Default Term")
+    {
+        push(@term_ids, $id);
+        if ($name eq $semester)
+        {
+            $sem = $id;
+        }
     }
+}
+
+if ($semester eq 'Default') {
+    @term_ids = sort { $a <=> $b } @term_ids;
+    $sem = $term_ids[-1];
 }
 
 my %courses = readfile("$config{export_dir}courses.csv");
