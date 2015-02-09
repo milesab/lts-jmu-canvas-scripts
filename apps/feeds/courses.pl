@@ -1,12 +1,14 @@
 #use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
 use CGI;
+use POSIX;
 use strict;
 use warnings;
 use DFconfig;
 
 =pod
 
-Return a list of course IDs based on a specified term.  If no term is specified, default to most recent.
+Return a list of course IDs based on a specified term.  If no term is specified,
+return courses from the two most recently added Canvas terms.
 
 =cut
 
@@ -25,8 +27,8 @@ if ($semester =~ /(SP|SM|FA)[0-9][0-9]/) {
     }
 
 my %terms = readfile("$config{export_dir}terms.csv");
-my @term_ids;
-my $sem;
+my @all_terms;
+my @req_terms;
 
 my $termcount = scalar(@{$terms{'term_id'}});
 for (my $i = 0; $i < $termcount; $i++)
@@ -35,17 +37,18 @@ for (my $i = 0; $i < $termcount; $i++)
     my $name = @{$terms{'name'}}[$i];
     if ($name ne "Default Term")
     {
-        push(@term_ids, $id);
+        push(@all_terms, $id);
         if ($name eq $semester)
         {
-            $sem = $id;
+            push (@req_terms, $id);
         }
     }
 }
 
 if ($semester eq 'Default') {
-    @term_ids = sort { $a <=> $b } @term_ids;
-    $sem = $term_ids[-1];
+    @all_terms = sort { $a <=> $b } @all_terms;
+    push (@req_terms, $all_terms[-1]);
+    push (@req_terms, $all_terms[-2]);
 }
 
 my %courses = readfile("$config{export_dir}courses.csv");
@@ -67,8 +70,12 @@ for (my $i = 0; $i < $count; $i++) {
     my $id = @{$courses{'course_id'}}[$i];
     my $name = @{$courses{'long_name'}}[$i];
     my $term = @{$courses{'term_id'}}[$i];
-    if (length $id > 0 && length $name > 0 && $id !~ /_draft/ && $term eq $sem && !($id ~~ @xlist)) {
-        push (@output, "$id $name\n");
+    if (length $term > 0 && isdigit($term) && $term ~~ @req_terms)
+    {
+        if (length $id > 0 && length $name > 0 && $id !~ /_draft/ && !($id ~~ @xlist))
+        {
+            push (@output, "$id $name\n");
+        }
     }
 }
 
