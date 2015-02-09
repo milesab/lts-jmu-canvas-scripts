@@ -28,6 +28,39 @@ def section_check(cid,sid,all_sections):
     return status
 
 
+def read_csv(filename):
+    export_dict = []
+    current_row = 0
+    export_file = open(config['export_dir'] + filename)
+    reader = csv.DictReader(export_file, fieldnames=[], restkey='undefined-fieldnames', delimiter=',', quotechar='"')
+    for row in reader:
+        current_row += 1
+        if current_row == 1:
+            reader.fieldnames = row['undefined-fieldnames']
+            continue
+        if row['status'] and row['status'] == "active":
+            export_dict.append(row)
+    export_file.close()
+    return export_dict
+
+
+# Get list of terms
+def get_terms():
+    terms_list = []
+    terms = open(config['export_dir'] + 'terms.csv', 'r')
+    reader = csv.DictReader(terms, delimiter=',', quotechar='"')
+    for row in reader:
+        term_id = row["term_id"]
+        if term_id.isdigit():
+            term_id = int(term_id)
+        term_name = row["name"]
+        status = row["status"]
+        if status == "active" and term_name != "Default Term":
+            terms_list.append( (term_id, term_name) )
+    terms.close()
+    return terms_list
+
+
 # Get list of courses
 def get_courses():
     courses_list = []
@@ -57,6 +90,19 @@ def get_sections():
             sections_list.append( (cid, sid) )
     sections.close()
     return sections_list
+
+
+def get_xlist():
+    xlist_list = []
+    xlist = open(config['export_dir'] + 'xlist.csv', 'r')
+    reader = csv.DictReader(xlist, delimiter=',', quotechar='"')
+    for row in reader:
+        sid = row["section_id"]
+        status = row["status"]
+        if status == "active":
+            xlist_list.append( sid )
+    xlist.close()
+    return xlist_list
 
 
 # Get enrollments for a course
