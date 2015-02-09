@@ -29,10 +29,9 @@ def clear_tempfiles():
 
 # Create or Remove Enrollments
 def change_enroll(tcid,tsid,enrollments,status):
-    unique_enrollments = set(enrollments)
-    for enrollment in unique_enrollments:
-        user = enrollment[0]
-        role = enrollment[1]
+    for enrollment in enrollments:
+        user = enrollment['user_id']
+        role = enrollment['role']
         enroll_string.write("%s,%s,%s,%s,%s\n" % (tcid,user,role,tsid,status))    
     temp_fn = temp_dir + 'enrollments.csv'
     temp_file = open(temp_fn, "wb")
@@ -53,8 +52,17 @@ if __name__ == '__main__':
 
     clear_tempfiles()
 
-    all_courses = api_local.get_courses()
-    all_sections = api_local.get_sections()
+    course_list = []
+    courses = api_local.read_csv('courses.csv','course_id')
+    for course in courses:
+        course_list.append(course['course_id'])
+
+    section_list = []
+    sections = api_local.read_csv('sections.csv','section_id')
+    for section in sections:
+        section_list.append((section['course_id'],section['section_id']))
+
+    enrollments = api_local.read_csv('enrollments.csv','user_id')
 
     section_string = StringIO()
     section_string.write("section_id,course_id,name,status,start_date,end_date\n")
@@ -72,16 +80,16 @@ if __name__ == '__main__':
         else:
             line = line.rstrip().replace(" ","")
             tcid,tsid,scid,ssid = line.split(",")
-        if tcid and tsid and scid and ssid and api_local.course_check(tcid,all_courses):
-            s_section = api_local.section_check(scid,ssid,all_sections)
-            t_section = api_local.section_check(tcid,tsid,all_sections)
+        if tcid and tsid and scid and ssid and api_local.course_check(tcid,course_list):
+            s_section = api_local.section_check(scid,ssid,section_list)
+            t_section = api_local.section_check(tcid,tsid,section_list)
             if s_section:
-                s_enroll = api_local.get_enrollments(scid,ssid)
+                s_enroll = [e for e in enrollments if e['course_id'] == scid and e['section_id'] == ssid]
                 if (not t_section and s_enroll):
                     change_section(tcid,tsid,"active")
                     change_enroll(tcid,tsid,s_enroll,"active")
                 elif (t_section and s_enroll):
-                    t_enroll = api_local.get_enrollments(tcid,tsid)
+                    t_enroll = [e for e in enrollments if e['course_id'] == tcid and e['section_id'] == tsid]
                     to_add = api_local.diff_enroll(s_enroll,t_enroll)
                     to_del = api_local.diff_enroll(t_enroll,s_enroll)
                     if to_add:
@@ -90,7 +98,7 @@ if __name__ == '__main__':
                         change_enroll(tcid,tsid,to_del,"deleted")
 
             elif t_section:
-                t_enroll = api_local.get_enrollments(tcid,tsid)
+                t_enroll = [e for e in enrollments if e['course_id'] == tcid and e['section_id'] == tsid]
                 if t_enroll:
                     change_enroll(tcid,tsid,t_enroll,"deleted")
                 change_section(tcid,tsid,"deleted")

@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, re, cgi
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'bin')))
 import api_local
 config = api_local.get_config()
@@ -10,9 +10,18 @@ def default_terms(terms):
         def_terms.append(t['term_id'])
     return def_terms
 
+
+def get_term_id(sem,terms):
+    full_names = { 'SP': 'Spring Semester 20', 'SM': 'Summer Session 20', 'FA': 'Fall Semester 20'}
+    for short, full in full_names.iteritems():
+        sem = sem.replace(short,full)
+    term_id = [t['term_id'] for t in terms if t['name'] == sem]
+    return term_id
+
+
 def xlist_courses():
     xlc = []
-    xlist = api_local.read_csv('xlist.csv')
+    xlist = api_local.read_csv('xlist.csv','section_id')
     for xl in xlist:
         if xl['section_id']:
             xlc.append(xl['section_id'])
@@ -21,19 +30,24 @@ def xlist_courses():
 
 if __name__ == '__main__':
 
-    terms = api_local.read_csv('terms.csv')
-    req_terms = default_terms(sorted(terms))
+    terms = api_local.read_csv('terms.csv','term_id')
     exclude = xlist_courses()
-    courses = api_local.read_csv('courses.csv')
+    courses = api_local.read_csv('courses.csv','course_id')
     show_courses = []
 
-    print "Content-type: text/plain\n";
+    sem = cgi.FieldStorage().getvalue('sem')
+    
+    if sem:
+        req_terms = get_term_id(sem,terms)
+    else:
+        req_terms = default_terms(terms)
 
     for course in courses:
         if course['term_id'] in req_terms and course['long_name'] and course['course_id'] and course['course_id'] not in exclude:
             show_courses.append(course)
     
-    show_courses.sort(key=lambda x: x['course_id'])
+    print "Content-type: text/plain\n";
+
     for course in show_courses:
         try:
             print "%s %s" % (course['course_id'], course['long_name'])

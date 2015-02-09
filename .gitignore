@@ -1,4 +1,5 @@
 .DS_Store
+web.config
 easel.sublime-project
 easel.sublime-workspace
 *.pyc

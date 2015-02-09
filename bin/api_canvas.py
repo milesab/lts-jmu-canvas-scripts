@@ -33,8 +33,11 @@ def job_status(job_arg,endpoint_arg):
 # Clean up files from previous imports
 def import_clear(import_file,import_id_file):
     try:
-        os.remove(import_id_file)
         os.remove(import_file)
+    except OSError:
+        pass
+    try:
+        os.remove(import_id_file)
     except OSError:
         pass
 

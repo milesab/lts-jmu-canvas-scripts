@@ -16,20 +16,8 @@ def get_config():
 config = get_config()
 
 
-# Check to see if course exists
-def course_check(cid,all_courses):
-    status = cid in all_courses
-    return status
-
-
-# Check to see if course,section exists
-def section_check(cid,sid,all_sections):
-    status = (cid,sid) in all_sections
-    return status
-
-
-def read_csv(filename):
-    export_dict = []
+def read_csv(filename,sortkey):
+    export_data = []
     current_row = 0
     export_file = open(config['export_dir'] + filename)
     reader = csv.DictReader(export_file, fieldnames=[], restkey='undefined-fieldnames', delimiter=',', quotechar='"')
@@ -38,87 +26,28 @@ def read_csv(filename):
         if current_row == 1:
             reader.fieldnames = row['undefined-fieldnames']
             continue
-        if row['status'] and row['status'] == "active":
-            export_dict.append(row)
+        if row[sortkey] and row['status'] and row['status'] == "active":
+            export_data.append(row)
     export_file.close()
-    return export_dict
+    export_data.sort(key=lambda x: x[sortkey])
+    return export_data
 
 
-# Get list of terms
-def get_terms():
-    terms_list = []
-    terms = open(config['export_dir'] + 'terms.csv', 'r')
-    reader = csv.DictReader(terms, delimiter=',', quotechar='"')
-    for row in reader:
-        term_id = row["term_id"]
-        if term_id.isdigit():
-            term_id = int(term_id)
-        term_name = row["name"]
-        status = row["status"]
-        if status == "active" and term_name != "Default Term":
-            terms_list.append( (term_id, term_name) )
-    terms.close()
-    return terms_list
+# Check to see if course exists
+def course_check(cid,course_list):
+    check = cid in course_list
+    return check
 
 
-# Get list of courses
-def get_courses():
-    courses_list = []
-    courses = open(config['export_dir'] + 'courses.csv', 'r')
-    reader = csv.DictReader(courses, delimiter=',', quotechar='"')
-    for row in reader:
-        ccid = int(row["canvas_course_id"])
-        cid = row["course_id"]
-        status = row["status"]
-        if status == "active":
-            courses_list.append( cid )
-    courses.close()
-    return courses_list
-
-
-# Get list of course sections
-def get_sections():
-    sections_list = []
-    sections = open(config['export_dir'] + 'sections.csv', 'r')
-    reader = csv.DictReader(sections, delimiter=',', quotechar='"')
-    for row in reader:
-        ccid = int(row["canvas_course_id"])
-        cid = row["course_id"]
-        sid = row["section_id"]
-        status = row["status"]
-        if status == "active":
-            sections_list.append( (cid, sid) )
-    sections.close()
-    return sections_list
-
-
-def get_xlist():
-    xlist_list = []
-    xlist = open(config['export_dir'] + 'xlist.csv', 'r')
-    reader = csv.DictReader(xlist, delimiter=',', quotechar='"')
-    for row in reader:
-        sid = row["section_id"]
-        status = row["status"]
-        if status == "active":
-            xlist_list.append( sid )
-    xlist.close()
-    return xlist_list
-
-
-# Get enrollments for a course
-def get_enrollments(cid,sid):
-    enrollments_list = []
-    enrollments = open(config['export_dir'] + 'enrollments.csv', 'r')
-    reader = csv.DictReader(enrollments, delimiter=',', quotechar='"')
-    for row in reader:
-        if row["status"] == "active" and cid == row["course_id"] and \
-           sid == row["section_id"] and row["user_id"]:
-            enrollments_list.append((row["user_id"],row["role"]))
-    enrollments.close()
-    return enrollments_list
+# Check to see if course,section exists
+def section_check(cid,sid,section_list):
+    check = (cid,sid) in section_list
+    return check
 
 
 # Enrollment Diff
 def diff_enroll(first,second):
-    second = set(second)
-    return [enroll for enroll in first if enroll not in second]
+    second_users = []
+    for user in second:
+        second_users.append(user['user_id'])
+    return [enroll for enroll in first if enroll['user_id'] not in second_users]
