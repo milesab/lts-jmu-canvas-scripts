@@ -42,9 +42,7 @@ if __name__ == '__main__':
 
 print "X-Enrollment-count: %s" % total
 print "Content-type: text/plain\n"
-print "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-print "<!DOCTYPE text>\n"
-print "<students>"
+print "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>\n<students>"
 for line in output:
     print line
 print "</students>\n";
