@@ -1,4 +1,4 @@
-import os, sys, re, cgi
+import os, sys, cgi
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'bin')))
 import api_local
 config = api_local.get_config()
@@ -7,10 +7,9 @@ if __name__ == '__main__':
 
     teacher_ids = cgi.FieldStorage().getvalue('id')
     teachers = teacher_ids.split(',')
+    enrollments = api_local.read_csv(config['export_dir'] + 'enrollments.csv', 'course_id')
 
     output = []
-
-    enrollments = api_local.read_csv(config['export_dir'] + 'enrollments.csv', 'course_id')
     
     for teacher in teachers:
         output.append("\nTeacher: %s\n\ncourse_id (canvas_course_id)\tsection_id (canvas_section_id)" % teacher)
