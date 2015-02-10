@@ -51,3 +51,8 @@ def diff_enroll(first,second):
     for user in second:
         second_users.append(user['user_id'])
     return [enroll for enroll in first if enroll['user_id'] not in second_users]
+
+
+# Build index from data and key
+def build_index(data,key):
+    return dict((d[key], dict(d, index=i)) for (i,d) in enumerate(data))
