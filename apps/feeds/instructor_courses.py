@@ -5,9 +5,7 @@ config = api_local.get_config()
 
 if __name__ == '__main__':
 
-
-    teacher_ids = "balltc"
-    #teacher_ids = cgi.FieldStorage().getvalue('id')
+    teacher_ids = cgi.FieldStorage().getvalue('id')
     teachers = teacher_ids.split(',')
 
     output = []
