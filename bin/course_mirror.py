@@ -53,33 +53,29 @@ if __name__ == '__main__':
     clear_tempfiles()
 
     course_list = []
-    courses = api_local.read_csv('courses.csv','course_id')
+    courses = api_local.read_csv(config['export_dir'] + 'courses.csv','course_id')
     for course in courses:
         course_list.append(course['course_id'])
 
     section_list = []
-    sections = api_local.read_csv('sections.csv','section_id')
+    sections = api_local.read_csv(config['export_dir'] + 'sections.csv','section_id')
     for section in sections:
         section_list.append((section['course_id'],section['section_id']))
 
-    enrollments = api_local.read_csv('enrollments.csv','user_id')
+    enrollments = api_local.read_csv(config['export_dir'] + 'enrollments.csv','user_id')
+    course_mirrors = api_local.read_csv(config['easel_home'] + 'data/add_enroll/course_mirror.csv', 'target_course_id')
 
     section_string = StringIO()
     section_string.write("section_id,course_id,name,status,start_date,end_date\n")
     enroll_string = StringIO()
     enroll_string.write("course_id,user_id,role,section_id,status\n")
 
-    mirror_file = open(config['easel_home'] + 'data/add_enroll/course_mirror.csv', 'r')
-    mirror_lines = [line for line in mirror_file if line.strip()]
-    mirror_file.close()
-    mirror_lines.sort()
 
-    for line in mirror_lines:
-        if not line.strip():
-            continue
-        else:
-            line = line.rstrip().replace(" ","")
-            tcid,tsid,scid,ssid = line.split(",")
+    for course_mirror in course_mirrors:
+        tcid = course_mirror['target_course_id'].rstrip().replace(" ","")
+        tsid = course_mirror['target_section_id'].rstrip().replace(" ","")
+        scid = course_mirror['source_course_id'].rstrip().replace(" ","")
+        ssid = course_mirror['source_section_id'].rstrip().replace(" ","")
         if tcid and tsid and scid and ssid and api_local.course_check(tcid,course_list):
             s_section = api_local.section_check(scid,ssid,section_list)
             t_section = api_local.section_check(tcid,tsid,section_list)

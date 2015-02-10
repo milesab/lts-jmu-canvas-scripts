@@ -16,21 +16,21 @@ def get_config():
 config = get_config()
 
 
-def read_csv(filename,sortkey):
-    export_data = []
+def read_csv(filepath,sortkey):
+    csv_data = []
     current_row = 0
-    export_file = open(config['export_dir'] + filename)
-    reader = csv.DictReader(export_file, fieldnames=[], restkey='undefined-fieldnames', delimiter=',', quotechar='"')
+    csv_file = open(filepath, 'r')
+    reader = csv.DictReader(csv_file, fieldnames=[], restkey='undefined-fieldnames', delimiter=',', quotechar='"')
     for row in reader:
         current_row += 1
         if current_row == 1:
             reader.fieldnames = row['undefined-fieldnames']
             continue
-        if row[sortkey] and row['status'] and row['status'] == "active":
-            export_data.append(row)
-    export_file.close()
-    export_data.sort(key=lambda x: x[sortkey])
-    return export_data
+        if row[sortkey]:
+            csv_data.append(row)
+    csv_file.close()
+    csv_data.sort(key=lambda x: x[sortkey])
+    return csv_data
 
 
 # Check to see if course exists
