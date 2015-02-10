@@ -19,15 +19,14 @@ def reverse(status):
 # Make changes to enrollments based on enrollment_changes.csv in add_enroll
 def enrollment_changes():
     matches = []
-
     enrollment_changes = api_local.read_csv(config['easel_home'] + 'data/add_enroll/enrollment_changes.csv', 'course_id')
     for enrollment_change in enrollment_changes:
         course_id = enrollment_change['course_id'].rstrip().replace(" ","")
         section_id = enrollment_change['section_id'].rstrip().replace(" ","")
         user_id = enrollment_change['user_id'].rstrip().replace(" ","")
         status = enrollment_change['status'].rstrip().replace(" ","")
-        if section_id and user_id and status:
-            linematch = section_id + ',' + user_id + ',student,' + section_id + ',' + reverse(status) + '\n'
+        if course_id and section_id and user_id and status:
+            linematch = course_id + ',' + user_id + ',student,' + section_id + ',' + reverse(status) + '\n'
             matches.append(linematch)
 
     for line in fileinput.input(config['import_dir'] + 'enrollments.csv', inplace=1):
