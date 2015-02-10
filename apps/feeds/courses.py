@@ -31,9 +31,8 @@ def xlist_courses():
 if __name__ == '__main__':
 
     terms = api_local.read_csv(config['export_dir'] + 'terms.csv','term_id')
-    exclude = xlist_courses()
     courses = api_local.read_csv(config['export_dir'] + 'courses.csv','course_id')
-    show_courses = []
+    exclude = xlist_courses()
 
     sem = cgi.FieldStorage().getvalue('sem')
     
@@ -41,6 +40,8 @@ if __name__ == '__main__':
         req_terms = get_term_id(sem,terms)
     else:
         req_terms = default_terms(terms)
+
+    show_courses = []
 
     for course in courses:
         if course['status'] == "active" and course['term_id'] in req_terms and course['long_name'] and \
