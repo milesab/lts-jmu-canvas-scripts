@@ -41,7 +41,10 @@ if __name__ == '__main__':
             output.append("\t\t<studentID>%s</studentID>\n\t</student>" % user_id)
 
 print "X-Enrollment-count: %s" % total
-print "Content-type: text/plain\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>\n<students>"
+print "Content-type: text/plain"
+print "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+print "<!DOCTYPE text>"
+print "<students>"
 for line in output:
     print line
 print "</students>\n";
