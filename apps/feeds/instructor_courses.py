@@ -13,7 +13,7 @@ if __name__ == '__main__':
     enrollments = api_local.read_csv(config['export_dir'] + 'enrollments.csv', 'course_id')
     
     for teacher in teachers:
-        output.append("Teacher: %s\ncourse_id (canvas_course_id)\tsection_id (canvas_section_id)" % teacher)
+        output.append("Teacher: %s\n\ncourse_id (canvas_course_id)\tsection_id (canvas_section_id)" % teacher)
         for enrollment in enrollments:
             if enrollment['role'] == "teacher" and enrollment['user_id'] == teacher:
                 cid = enrollment['course_id']
