@@ -65,7 +65,7 @@ if __name__ == '__main__':
     
     if format == "XML":
         output.append("X-Enrollment-count: %s\n" % total)
-        output.append("Content-type: text/plain\n")
+        output.append("Content-type: text/plain")
         output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>")
         if teachers:
             output.append("<teachers>")
