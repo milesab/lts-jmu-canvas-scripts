@@ -64,8 +64,8 @@ if __name__ == '__main__':
             teachers.append((course_id,user_record)) 
     
     if format == "XML":
-        output.append("X-Enrollment-count: %s" % total)
-        output.append("Content-type: text/plain")
+        output.append("X-Enrollment-count: %s\n" % total)
+        output.append("Content-type: text/plain\n")
         output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>")
         if teachers:
             output.append("<teachers>")
