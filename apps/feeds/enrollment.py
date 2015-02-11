@@ -12,7 +12,6 @@ def get_params(fieldStorage):
 if __name__ == '__main__':
 
     params = get_params(cgi.FieldStorage())
-    print params
 
     courses = cgi.FieldStorage().getvalue('id').rstrip().replace("default","").split(',')
     users = api_local.read_csv(config['export_dir'] + 'users.csv', 'canvas_user_id')
@@ -48,6 +47,7 @@ if __name__ == '__main__':
 print "X-Enrollment-count: %s" % total
 print "Content-type: text/plain\n"
 print "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>\n<students>"
+print params
 for line in output:
     print line
 print "</students>\n";
