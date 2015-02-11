@@ -11,10 +11,6 @@ def get_params(fieldStorage):
 
 if __name__ == '__main__':
 
-    # Default parameters
-    format = 'XML'
-    include = ['student','teacher']
-
     params = get_params(cgi.FieldStorage())
 
     output = []
@@ -26,9 +22,12 @@ if __name__ == '__main__':
             output.append("No course_id specified - please specify a course with ?id=")
         try:
             format = params['format']
+        except:
+            format = 'XML'
+        try:
             include = params['include']
         except:
-            pass
+            include = ['student','teacher']
 
     users = api_local.read_csv(config['export_dir'] + 'users.csv', 'canvas_user_id')
     user_index = api_local.build_index(users,key='canvas_user_id')
