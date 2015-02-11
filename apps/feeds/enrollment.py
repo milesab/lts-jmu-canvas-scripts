@@ -3,11 +3,13 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.
 import api_local
 config = api_local.get_config()
 
+
 def get_params(fieldStorage):
     params = {}
     for key in fieldStorage.keys():
         params[key] = fieldStorage[key].value
     return params
+
 
 if __name__ == '__main__':
 
@@ -112,4 +114,3 @@ if __name__ == '__main__':
         print "Content-type: text/plain\n"
         print "Canvas Enrollment Feed\n\nParameters:\n\tid=course_id|comma_separated_course_ids"
         print "\tformat=xml|flat\n\tinclude=teacher|student|all"
-
