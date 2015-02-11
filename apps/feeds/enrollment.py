@@ -20,14 +20,15 @@ if __name__ == '__main__':
     try:
         format = params['format']
     except:
-        format = 'XML'
+        format = 'xml'
     try:
-        include = params['include'] 
+        include = params['include']
+        if include.lower() == 'all':
+            include = ['student','teacher']
     except:
         include = ['student','teacher']
 
     if courses:
-
         users = api_local.read_csv(config['export_dir'] + 'users.csv', 'canvas_user_id')
         user_index = api_local.build_index(users,key='canvas_user_id')
         xlist = api_local.read_csv(config['export_dir'] + 'xlist.csv', 'xlist_course_id')
@@ -38,9 +39,9 @@ if __name__ == '__main__':
 
         enrollments = api_local.read_csv(config['export_dir'] + 'enrollments.csv', 'course_id')
 
-        if format == "XML":
+        if format == 'xml':
             enrollments.sort(key=lambda x: (x['course_id'],x['user_id']))
-        elif format == "flat":
+        elif format == 'flat':
             enrollments.sort(key=lambda x: x['user_id'])
 
         total = 0
@@ -62,7 +63,7 @@ if __name__ == '__main__':
                 user_record = user_index[canvas_id]
                 teachers.append((course_id,user_record)) 
         
-        if format == "XML":
+        if format.lower() == "xml":
             output.append("X-Enrollment-count: %s" % total)
             output.append("Content-type: text/plain\n")
             output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>")
@@ -76,7 +77,7 @@ if __name__ == '__main__':
                     output.append("\t\t<groupID>%s</groupID>" % teacher[0])
                     output.append("\t\t<lastname>%s</lastname>" % teacher[1]['last_name'])
                     output.append("\t\t<middlename></middlename>\n\t\t<startdate></startdate>")
-                    output.append("\t\t<teacherID>%s</teacherID>\n\t</student>" % teacher[1]['login_id'])            
+                    output.append("\t\t<teacherID>%s</teacherID>\n\t</teacher>" % teacher[1]['login_id'])            
                 output.append("</teachers>")
             if students:
                 output.append("<students>")
@@ -91,7 +92,7 @@ if __name__ == '__main__':
                     output.append("\t\t<studentID>%s</studentID>\n\t</student>" % student[1]['login_id'])
                 output.append("</students>")
 
-        if format == "flat":
+        if format.lower == "flat":
             output.append("Content-type: text/plain\n")
             for teacher in teachers:
                 entry = "instructor\t%s\t%s\t%s\t%s" % \
@@ -109,5 +110,6 @@ if __name__ == '__main__':
 
     else:
         print "Content-type: text/plain\n"
-        print "No courses specified, use ?id=<course_id>"
+        print "Canvas Enrollment Feed\n\nParameters:\n\tid=course_id|comma_separated_course_ids"
+        print "\tformat=xml|flat\n\tinclude=teacher|student|all"
 
