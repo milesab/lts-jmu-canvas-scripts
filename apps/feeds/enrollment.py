@@ -92,7 +92,7 @@ if __name__ == '__main__':
                     output.append("\t\t<studentID>%s</studentID>\n\t</student>" % student[1]['login_id'])
                 output.append("</students>")
 
-        if format.lower == "flat":
+        if format.lower() == "flat":
             output.append("Content-type: text/plain\n")
             for teacher in teachers:
                 entry = "instructor\t%s\t%s\t%s\t%s" % \
