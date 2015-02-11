@@ -94,7 +94,7 @@ if __name__ == '__main__':
 
 
     if format == "flat":
-        output.append("Content-type: text/plain")
+        output.append("Content-type: text/plain\n")
         for teacher in teachers:
             entry = "instructor\t%s\t%s\t%s\t%s" % \
             (teacher[1]['login_id'],teacher[1]['email'],teacher[1]['first_name'],teacher[1]['last_name'])
