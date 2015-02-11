@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     teacher_ids = cgi.FieldStorage().getvalue('id')
     teachers = teacher_ids.split(',')
-    enrollments = api_local.read_csv(config['export_dir'] + 'enrollments.csv', 'course_id')
+    enrollments = api_local.read_csv(config['local']['export_dir'] + 'enrollments.csv', 'course_id')
 
     output = []
     

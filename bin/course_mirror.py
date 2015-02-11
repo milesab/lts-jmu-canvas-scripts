@@ -10,9 +10,9 @@ import api_local, api_canvas
 config = api_local.get_config()
 
 
-import_file = config['easel_home'] + 'data/temp/course_mirror.zip'
-import_id_file = config['easel_home'] + 'data/temp/course_mirror_id.txt'
-temp_dir = config['easel_home'] + 'data/temp/course_mirror/'
+import_file = config['local']['easel_home'] + 'data/temp/course_mirror.zip'
+import_id_file = config['local']['easel_home'] + 'data/temp/course_mirror_id.txt'
+temp_dir = config['local']['easel_home'] + 'data/temp/course_mirror/'
 
 
 # Clear temp directory
@@ -53,17 +53,17 @@ if __name__ == '__main__':
     clear_tempfiles()
 
     course_list = []
-    courses = api_local.read_csv(config['export_dir'] + 'courses.csv','course_id')
+    courses = api_local.read_csv(config['local']['export_dir'] + 'courses.csv','course_id')
     for course in courses:
         course_list.append(course['course_id'])
 
     section_list = []
-    sections = api_local.read_csv(config['export_dir'] + 'sections.csv','section_id')
+    sections = api_local.read_csv(config['local']['export_dir'] + 'sections.csv','section_id')
     for section in sections:
         section_list.append((section['course_id'],section['section_id']))
 
-    enrollments = api_local.read_csv(config['export_dir'] + 'enrollments.csv','user_id')
-    course_mirrors = api_local.read_csv(config['easel_home'] + 'data/add_enroll/course_mirror.csv', 'target_course_id')
+    enrollments = api_local.read_csv(config['local']['export_dir'] + 'enrollments.csv','user_id')
+    course_mirrors = api_local.read_csv(config['local']['easel_home'] + 'data/add_enroll/course_mirror.csv', 'target_course_id')
 
     section_string = StringIO()
     section_string.write("section_id,course_id,name,status,start_date,end_date\n")

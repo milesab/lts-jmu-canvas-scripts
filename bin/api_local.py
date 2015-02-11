@@ -1,16 +1,10 @@
-import os, csv
+import os, json, csv
 
 def get_config():
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
     os.chdir(dname)
-    config = {}
-    config_file = open("../conf/settings.conf")
-    for line in config_file:
-        line = line.strip()
-        if line and line[0] is not "#" and line[-1] is not "=":
-            key,val = line.rsplit("=",1)
-            config[key.strip()] = val.strip()
+    config = json.loads(open("../conf/settings.json").read())
     return config
     
 config = get_config()

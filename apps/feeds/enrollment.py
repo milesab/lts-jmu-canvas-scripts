@@ -31,15 +31,15 @@ if __name__ == '__main__':
         include = ['student','teacher']
 
     if courses:
-        users = api_local.read_csv(config['export_dir'] + 'users.csv', 'canvas_user_id')
+        users = api_local.read_csv(config['local']['export_dir'] + 'users.csv', 'canvas_user_id')
         user_index = api_local.build_index(users,key='canvas_user_id')
-        xlist = api_local.read_csv(config['export_dir'] + 'xlist.csv', 'xlist_course_id')
+        xlist = api_local.read_csv(config['local']['export_dir'] + 'xlist.csv', 'xlist_course_id')
        
         for course in xlist:
             if course['xlist_course_id'] in courses and course['section_id'] not in courses:
                 courses.append(course['section_id'])
 
-        enrollments = api_local.read_csv(config['export_dir'] + 'enrollments.csv', 'course_id')
+        enrollments = api_local.read_csv(config['local']['export_dir'] + 'enrollments.csv', 'course_id')
 
         if format == 'xml':
             enrollments.sort(key=lambda x: (x['course_id'],x['user_id']))

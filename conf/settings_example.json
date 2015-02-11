@@ -1,0 +1,26 @@
+{
+    "environment": {
+        "debug": "0"
+    },
+    "canvas": {
+        "account_id": "12345",
+        "access_token": "<canvas access token generated via the canvas web interface>",
+        "base_url": "https://canvas.university.edu/api/v1/"
+    },
+    "local": {
+        "timezone": "US/Eastern",
+        "smtp_server": "smtp.university.edu",
+        "smtp_domain": "university.edu",
+        "easel_home": "/usr/local/easel/",
+        "import_dir": "/usr/local/easel/data/import/",
+        "export_dir": "/usr/local/easel/data/export/",
+        "log_dir": "/usr/local/easel/logs/"
+    },
+    "mpe": {
+        "course_id": "123450",
+        "quiz1": "123451",
+        "quiz2": "123452",
+        "quiz3": "123453",
+        "quiz4": "123454"
+    }
+}

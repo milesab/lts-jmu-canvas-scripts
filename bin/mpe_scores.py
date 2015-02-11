@@ -5,13 +5,13 @@ import shutil, re, os
 import api_local, api_canvas
 
 config = api_local.get_config()
-scores_file = config['easel_home'] + 'data/temp/mpe_scores.txt'
-logging.basicConfig(filename=config['log_dir'] + 'mpe_scores.log',level=logging.INFO)
+scores_file = config['local']['easel_home'] + 'data/temp/mpe_scores.txt'
+logging.basicConfig(filename=config['local']['log_dir'] + 'mpe_scores.log',level=logging.INFO)
 
 
 # Time Zone Definitions
 gmt = pytz.timezone('GMT')
-ltz = pytz.timezone(config['local_timezone'])
+ltz = pytz.timezone(config['local']['timezone'])
 
 
 # Pull time from filename
@@ -25,7 +25,7 @@ def date_from_filename(filename):
 
 # Determine timestamp of most recent scorefile
 def last_score():
-    scorefiles = sorted([ f for f in os.listdir(config['easel_home'] + 'data/mpe/') if f.startswith('scores-')])
+    scorefiles = sorted([ f for f in os.listdir(config['local']['easel_home'] + 'data/mpe/') if f.startswith('scores-')])
     if scorefiles:
         lastscore = ltz.localize(date_from_filename('%s' % scorefiles[-1],))
         return lastscore
@@ -36,7 +36,7 @@ def last_score():
 
 # Determine timestamp of last mpe enrollment run
 def last_run():
-    lastrunfile = config['import_dir'] + 'math_placement/timestamp.txt'
+    lastrunfile = config['local']['import_dir'] + 'math_placement/timestamp.txt'
     if lastrunfile:
         lastrun = ltz.localize(datetime.strptime(open(lastrunfile, 'r').read().strip(), '%Y%m%d-%H%M%S'))
         return lastrun
@@ -61,13 +61,13 @@ def create_scorefile():
                 for sub in student['submissions']:
                     user_id, quiz, qscore, qtime = sub['user_id'], sub['assignment_id'], sub['score'], sub['submitted_at']
                     if user_id == key:
-                        if quiz == config['mpe_quiz1']:
+                        if quiz == config['mpe']['quiz1']:
                             p1score, p1time = qscore, qtime
-                        if quiz == config['mpe_quiz2']:
+                        if quiz == config['mpe']['quiz2']:
                             p2score, p2time = qscore, qtime
-                        if quiz == config['mpe_quiz3']:
+                        if quiz == config['mpe']['quiz3']:
                             p3score, p3time = qscore, qtime
-                        if quiz == config['mpe_quiz4']:
+                        if quiz == config['mpe']['quiz4']:
                             p4score, p4time = qscore, qtime
     if not None in (p1score, p2score, p3score, p4score):
         gmt_timestamp = datetime.strptime(max(p1time, p2time, p3time, p4time), '%Y-%m-%dT%H:%M:%SZ')
@@ -88,9 +88,10 @@ def create_scorefile():
 
 # Archive and publish score file
 def publish_scorefile():
-    shutil.copy2(scores_file, config['import_dir'] + 'math_placement/mathp_jsa0005.dat')
+    shutil.copy2(scores_file, config['local']['import_dir'] + 'math_placement/mathp_jsa0005.dat')
     if os.stat(scores_file).st_size > 0:
-        shutil.copy2(scores_file, config['easel_home'] + 'data/mpe/scores-%s.txt' % datetime.now().strftime('%Y%m%d-%H%M%S'))
+        timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
+        shutil.copy2(scores_file, config['local']['easel_home'] + 'data/mpe/scores-%s.txt' % timestamp)
 
 
 if __name__ == '__main__':
@@ -101,7 +102,7 @@ if __name__ == '__main__':
     # Map student ID to sis_id
     teststudent_id = None
     student_ids = {}
-    student_data = api_canvas.get_students(config['mpe_course_id'])
+    student_data = api_canvas.get_students(config['mpe']['course_id'])
     for student in student_data:
         if not student['name'] == "Test Student":
             key, value = student['id'], student['sis_user_id']
@@ -109,16 +110,16 @@ if __name__ == '__main__':
         else:
             teststudent_id = student['id']
 
-    score_data = api_canvas.get_scores(student_data,config['mpe_course_id'])
+    score_data = api_canvas.get_scores(student_data,config['mpe']['course_id'])
     create_scorefile()
     publish_scorefile()
 
     # Save students data for troubleshooting
-    fout = open(config['easel_home'] + 'data/temp/mpe_student_data.json', 'w')
+    fout = open(config['local']['easel_home'] + 'data/temp/mpe_student_data.json', 'w')
     json.dump(student_data,fout)
     fout.close
 
     # Save grades data for troubleshooting
-    fout = open(config['easel_home'] + 'data/temp/mpe_score_data.json', 'w')
+    fout = open(config['local']['easel_home'] + 'data/temp/mpe_score_data.json', 'w')
     json.dump(score_data,fout)
     fout.close

@@ -4,8 +4,8 @@ import api_local, api_canvas
 config = api_local.get_config()
 
 
-export_file = config['easel_home'] + 'data/temp/sisexport.zip'
-export_id_file = config['easel_home'] + 'data/temp/sisexport_id.txt'
+export_file = config['local']['easel_home'] + 'data/temp/sisexport.zip'
+export_id_file = config['local']['easel_home'] + 'data/temp/sisexport_id.txt'
 
 
 # Generate new export
@@ -25,8 +25,8 @@ def generate_export():
 
 # Check if export has been updated in the last 5 hours
 def export_time():
-    if os.path.isfile(config['export_dir'] + 'courses.csv'):
-        t = os.path.getmtime(config['export_dir'] + 'courses.csv')
+    if os.path.isfile(config['local']['export_dir'] + 'courses.csv'):
+        t = os.path.getmtime(config['local']['export_dir'] + 'courses.csv')
         if (datetime.datetime.today() - datetime.datetime.fromtimestamp(t)) < datetime.timedelta(hours=5):
             return False
         else:

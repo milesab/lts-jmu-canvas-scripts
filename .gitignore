@@ -3,5 +3,5 @@ web.config
 easel.sublime-project
 easel.sublime-workspace
 *.pyc
-conf/settings.conf
+conf/settings.json
 bin/test.py
