@@ -1,13 +1,16 @@
 import os, sys, cgi
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'bin')))
 import api_local
+
 config = api_local.get_config()
+export_dir = config['local']['export_dir']
+
 
 if __name__ == '__main__':
 
     teacher_ids = cgi.FieldStorage().getvalue('id')
     teachers = teacher_ids.split(',')
-    enrollments = api_local.read_csv(config['local']['export_dir'] + 'enrollments.csv', 'course_id')
+    enrollments = api_local.read_csv(export_dir + 'enrollments.csv', 'course_id')
 
     output = []
     

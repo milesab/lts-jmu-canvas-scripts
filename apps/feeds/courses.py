@@ -1,7 +1,9 @@
 import os, sys, re, cgi
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'bin')))
 import api_local
+
 config = api_local.get_config()
+export_dir = config['local']['export_dir']
 
 
 def default_terms(terms):
@@ -21,7 +23,7 @@ def get_term_id(sem,terms):
 
 def xlist_courses():
     xlc = []
-    xlist = api_local.read_csv(config['local']['export_dir'] + 'xlist.csv','section_id')
+    xlist = api_local.read_csv(export_dir + 'xlist.csv','section_id')
     for xl in xlist:
         if xl['section_id']:
             xlc.append(xl['section_id'])
@@ -30,8 +32,8 @@ def xlist_courses():
 
 if __name__ == '__main__':
 
-    terms = api_local.read_csv(config['local']['export_dir'] + 'terms.csv','term_id')
-    courses = api_local.read_csv(config['local']['export_dir'] + 'courses.csv','course_id')
+    terms = api_local.read_csv(export_dir + 'terms.csv','term_id')
+    courses = api_local.read_csv(export_dir + 'courses.csv','course_id')
     exclude = xlist_courses()
 
     sem = cgi.FieldStorage().getvalue('sem')

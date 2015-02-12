@@ -8,11 +8,11 @@ except:
 import api_local, api_canvas
 
 config = api_local.get_config()
-
-
-import_file = config['local']['easel_home'] + 'data/temp/course_mirror.zip'
-import_id_file = config['local']['easel_home'] + 'data/temp/course_mirror_id.txt'
-temp_dir = config['local']['easel_home'] + 'data/temp/course_mirror/'
+easel_home = config['local']['easel_home']
+import_file = easel_home + 'data/temp/course_mirror.zip'
+import_id_file = easel_home + 'data/temp/course_mirror_id.txt'
+temp_dir = easel_home + 'data/temp/course_mirror/'
+export_dir = config['local']['export_dir']
 
 
 # Clear temp directory
@@ -53,17 +53,17 @@ if __name__ == '__main__':
     clear_tempfiles()
 
     course_list = []
-    courses = api_local.read_csv(config['local']['export_dir'] + 'courses.csv','course_id')
+    courses = api_local.read_csv(export_dir + 'courses.csv','course_id')
     for course in courses:
         course_list.append(course['course_id'])
 
     section_list = []
-    sections = api_local.read_csv(config['local']['export_dir'] + 'sections.csv','section_id')
+    sections = api_local.read_csv(export_dir + 'sections.csv','section_id')
     for section in sections:
         section_list.append((section['course_id'],section['section_id']))
 
-    enrollments = api_local.read_csv(config['local']['export_dir'] + 'enrollments.csv','user_id')
-    course_mirrors = api_local.read_csv(config['local']['easel_home'] + 'data/add_enroll/course_mirror.csv', 'target_course_id')
+    enrollments = api_local.read_csv(export_dir + 'enrollments.csv','user_id')
+    course_mirrors = api_local.read_csv(easel_home + 'data/add_enroll/course_mirror.csv', 'target_course_id')
 
     section_string = StringIO()
     section_string.write("section_id,course_id,name,status,start_date,end_date\n")
@@ -76,9 +76,9 @@ if __name__ == '__main__':
         tsid = course_mirror['target_section_id'].rstrip().replace(" ","")
         scid = course_mirror['source_course_id'].rstrip().replace(" ","")
         ssid = course_mirror['source_section_id'].rstrip().replace(" ","")
-        if tcid and tsid and scid and ssid and api_local.course_check(tcid,course_list):
-            s_section = api_local.section_check(scid,ssid,section_list)
-            t_section = api_local.section_check(tcid,tsid,section_list)
+        if tcid and tsid and scid and ssid and tcid in course_list:
+            s_section = (scid,ssid) in section_list
+            t_section = (tcid,tsid) in section_list
             if s_section:
                 s_enroll = [e for e in enrollments if e['course_id'] == scid and e['section_id'] == ssid]
                 if (not t_section and s_enroll):

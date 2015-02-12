@@ -5,7 +5,9 @@ import shutil, re, os
 import api_local, api_canvas
 
 config = api_local.get_config()
-scores_file = config['local']['easel_home'] + 'data/temp/mpe_scores.txt'
+easel_home = config['local']['easel_home']
+import_dir = config['local']['import_dir']
+scores_file = easel_home + 'data/temp/mpe_scores.txt'
 logging.basicConfig(filename=config['local']['log_dir'] + 'mpe_scores.log',level=logging.INFO)
 
 
@@ -25,7 +27,7 @@ def date_from_filename(filename):
 
 # Determine timestamp of most recent scorefile
 def last_score():
-    scorefiles = sorted([ f for f in os.listdir(config['local']['easel_home'] + 'data/mpe/') if f.startswith('scores-')])
+    scorefiles = sorted([ f for f in os.listdir(easel_home + 'data/mpe/') if f.startswith('scores-')])
     if scorefiles:
         lastscore = ltz.localize(date_from_filename('%s' % scorefiles[-1],))
         return lastscore
@@ -36,7 +38,7 @@ def last_score():
 
 # Determine timestamp of last mpe enrollment run
 def last_run():
-    lastrunfile = config['local']['import_dir'] + 'math_placement/timestamp.txt'
+    lastrunfile = import_dir + 'math_placement/timestamp.txt'
     if lastrunfile:
         lastrun = ltz.localize(datetime.strptime(open(lastrunfile, 'r').read().strip(), '%Y%m%d-%H%M%S'))
         return lastrun
@@ -88,10 +90,10 @@ def create_scorefile():
 
 # Archive and publish score file
 def publish_scorefile():
-    shutil.copy2(scores_file, config['local']['import_dir'] + 'math_placement/mathp_jsa0005.dat')
+    shutil.copy2(scores_file,import_dir + 'math_placement/mathp_jsa0005.dat')
     if os.stat(scores_file).st_size > 0:
         timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
-        shutil.copy2(scores_file, config['local']['easel_home'] + 'data/mpe/scores-%s.txt' % timestamp)
+        shutil.copy2(scores_file,easel_home + 'data/mpe/scores-%s.txt' % timestamp)
 
 
 if __name__ == '__main__':
@@ -115,11 +117,11 @@ if __name__ == '__main__':
     publish_scorefile()
 
     # Save students data for troubleshooting
-    fout = open(config['local']['easel_home'] + 'data/temp/mpe_student_data.json', 'w')
+    fout = open(easel_home + 'data/temp/mpe_student_data.json', 'w')
     json.dump(student_data,fout)
     fout.close
 
     # Save grades data for troubleshooting
-    fout = open(config['local']['easel_home'] + 'data/temp/mpe_score_data.json', 'w')
+    fout = open(easel_home + 'data/temp/mpe_score_data.json', 'w')
     json.dump(score_data,fout)
     fout.close

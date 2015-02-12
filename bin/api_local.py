@@ -27,18 +27,6 @@ def read_csv(filepath,sortkey):
     return csv_data
 
 
-# Check to see if course exists
-def course_check(cid,course_list):
-    check = cid in course_list
-    return check
-
-
-# Check to see if course,section exists
-def section_check(cid,sid,section_list):
-    check = (cid,sid) in section_list
-    return check
-
-
 # Enrollment Diff
 def diff_enroll(first,second):
     second_users = []

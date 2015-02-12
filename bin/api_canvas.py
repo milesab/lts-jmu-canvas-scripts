@@ -6,6 +6,7 @@ config = api_local.get_config()
 account_id = config['canvas']['account_id']
 access_token = config['canvas']['access_token']
 
+
 # Break up data for multiple API calls
 def chunks(seq, size):
     return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
