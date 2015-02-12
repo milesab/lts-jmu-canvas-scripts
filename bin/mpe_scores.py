@@ -9,7 +9,11 @@ easel_home = config['local']['easel_home']
 import_dir = config['local']['import_dir']
 scores_file = easel_home + 'data/temp/mpe_scores.txt'
 logging.basicConfig(filename=config['local']['log_dir'] + 'mpe_scores.log',level=logging.INFO)
-
+mpe_course_id = config['mpe']['course_id']
+mpe_quiz1 = config['mpe']['quiz1']
+mpe_quiz2 = config['mpe']['quiz2']
+mpe_quiz3 = config['mpe']['quiz3']
+mpe_quiz4 = config['mpe']['quiz4']
 
 # Time Zone Definitions
 gmt = pytz.timezone('GMT')
@@ -63,13 +67,13 @@ def create_scorefile():
                 for sub in student['submissions']:
                     user_id, quiz, qscore, qtime = sub['user_id'], sub['assignment_id'], sub['score'], sub['submitted_at']
                     if user_id == key:
-                        if quiz == config['mpe']['quiz1']:
+                        if quiz == mpe_quiz1:
                             p1score, p1time = qscore, qtime
-                        if quiz == config['mpe']['quiz2']:
+                        if quiz == mpe_quiz2:
                             p2score, p2time = qscore, qtime
-                        if quiz == config['mpe']['quiz3']:
+                        if quiz == mpe_quiz3:
                             p3score, p3time = qscore, qtime
-                        if quiz == config['mpe']['quiz4']:
+                        if quiz == mpe_quiz4:
                             p4score, p4time = qscore, qtime
     if not None in (p1score, p2score, p3score, p4score):
         gmt_timestamp = datetime.strptime(max(p1time, p2time, p3time, p4time), '%Y-%m-%dT%H:%M:%SZ')
@@ -104,7 +108,7 @@ if __name__ == '__main__':
     # Map student ID to sis_id
     teststudent_id = None
     student_ids = {}
-    student_data = api_canvas.get_students(config['mpe']['course_id'])
+    student_data = api_canvas.get_students(mpe_course_id)
     for student in student_data:
         if not student['name'] == "Test Student":
             key, value = student['id'], student['sis_user_id']
@@ -112,7 +116,7 @@ if __name__ == '__main__':
         else:
             teststudent_id = student['id']
 
-    score_data = api_canvas.get_scores(student_data,config['mpe']['course_id'])
+    score_data = api_canvas.get_scores(student_data,mpe_course_id)
     create_scorefile()
     publish_scorefile()
 
