@@ -1,5 +1,6 @@
 import os, json, csv
 
+# Load local application settings
 def get_config():
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
@@ -7,9 +8,8 @@ def get_config():
     config = json.loads(open("../conf/settings.json").read())
     return config
     
-config = get_config()
 
-
+# Read CSV file into list of dicts
 def read_csv(filepath,sortkey):
     csv_data = []
     current_row = 0
