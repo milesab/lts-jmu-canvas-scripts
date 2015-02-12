@@ -54,10 +54,10 @@ def last_run():
 # Populate score file with new scores only
 def create_scorefile():
     if lastscore > lastrun:
-        logging.info('Appending to scorefile\n  lastscore: %s\n  lastrun  : %s' % (lastscore, lastrun))
+        logging.info('Appending to scorefile - lastscore: %s - lastrun  : %s' % (lastscore, lastrun))
         file = open(scores_file, 'a')
     else:
-        logging.info('Writing new scorefile\n  lastscore: %s\n  lastrun  : %s' % (lastscore, lastrun))
+        logging.info('Writing new scorefile  - lastscore: %s - lastrun  : %s' % (lastscore, lastrun))
         file = open(scores_file, 'w')
     for student in score_data:
         if not student['user_id'] == teststudent_id:
