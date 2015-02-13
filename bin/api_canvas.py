@@ -63,15 +63,16 @@ def import_zip(import_file,import_dir):
 # Submit import to canvas and record the import ID
 def import_submit(import_file,import_id_file):
     if os.path.isfile(import_file):
-        params = {'attachment':open(import_file,'rb'),
-            'access_token':access_token,
+        params = {'attachment':open(str(import_file),'rb'),
+            'access_token':str(access_token),
             'import_type':'instructure_csv',
+            'extension': 'zip',
             }
 
         # MultipartPostHandler module is needed to post the CSV zip file
         opener = urllib2.build_opener(MultipartPostHandler.MultipartPostHandler)
         urllib2.install_opener(opener)
-        req = urllib2.Request(base_url + 'accounts/%s/sis_imports.json' % account_id,params)
+        req = urllib2.Request(str(base_url + 'accounts/%s/sis_imports.json' % account_id),params)
         response = urllib2.urlopen(req).read().strip()
         response_data = json.loads(response)
         import_id = response_data['id']
@@ -80,6 +81,10 @@ def import_submit(import_file,import_id_file):
         id_file = open(import_id_file,'w')
         id_file.write("%s" % import_id)
         id_file.close()
+
+
+def new_submit(import_file,import_id_file):
+
 
 
 # Submit export request to canvas using the provisioning report API
