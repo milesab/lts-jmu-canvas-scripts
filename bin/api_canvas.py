@@ -83,10 +83,6 @@ def import_submit(import_file,import_id_file):
         id_file.close()
 
 
-def new_submit(import_file,import_id_file):
-
-
-
 # Submit export request to canvas using the provisioning report API
 def export_submit(export_id_file):
     endpoint = base_url + 'accounts/%s/reports/provisioning_csv' % account_id
