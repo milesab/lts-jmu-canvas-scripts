@@ -3,8 +3,8 @@ import api_local, api_canvas
 
 config = api_local.get_config()
 easel_home = config['local']['easel_home']
-import_file = easel_home + 'data/temp/sisimport.zip'
-import_id_file = easel_home + 'data/temp/sisimport_id.txt'
+import_file = str(easel_home + 'data/temp/sisimport.zip')
+import_id_file = str(easel_home + 'data/temp/sisimport_id.txt')
 import_dir = config['local']['import_dir']
 
 
