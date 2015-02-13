@@ -6,7 +6,6 @@ config = api_local.get_config()
 account_id = config['canvas']['account_id']
 access_token = config['canvas']['access_token']
 base_url = config['canvas']['base_url']
-access_token = config['canvas']['access_token']
 export_dir = config['local']['export_dir']
 
 
