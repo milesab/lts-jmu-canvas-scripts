@@ -67,13 +67,13 @@ def create_scorefile():
                 for sub in student['submissions']:
                     user_id, quiz, qscore, qtime = sub['user_id'], sub['assignment_id'], sub['score'], sub['submitted_at']
                     if user_id == key:
-                        if quiz == mpe_quiz1:
+                        if int(quiz) == int(mpe_quiz1):
                             p1score, p1time = qscore, qtime
-                        if quiz == mpe_quiz2:
+                        if int(quiz) == int(mpe_quiz2):
                             p2score, p2time = qscore, qtime
-                        if quiz == mpe_quiz3:
+                        if int(quiz) == int(mpe_quiz3):
                             p3score, p3time = qscore, qtime
-                        if quiz == mpe_quiz4:
+                        if int(quiz) == int(mpe_quiz4):
                             p4score, p4time = qscore, qtime
     if not None in (p1score, p2score, p3score, p4score):
         gmt_timestamp = datetime.strptime(max(p1time, p2time, p3time, p4time), '%Y-%m-%dT%H:%M:%SZ')
