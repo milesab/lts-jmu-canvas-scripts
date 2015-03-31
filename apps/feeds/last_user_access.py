@@ -15,26 +15,26 @@ if __name__ == '__main__':
     users = api_local.read_csv(export_dir + 'users.csv', 'login_id')
     user_index = api_local.build_index(users,key='canvas_user_id')
 
-    lastaccess = api_local.read_csv(report_dir + 'last_user_access.csv', 'user id')
+    lastaccess = api_local.read_csv(report_dir + 'last_user_access_csv.csv', 'user id')
     lastaccess_index = api_local.build_index(lastaccess,key='user id')
 
     output = []
     canvas_ids = []
 
 
-    for user in search_strings:
+    # Build array of canvas_user_ids with corresponding login_ids matching a search string
+    for search_string in search_strings:
         for canvas_user_id in user_index:
             login_id = user_index[canvas_user_id]['login_id']
-            if user in login_id:
-                canvas_ids.append((canvas_user_id,login_id))
+            if search_string in login_id:
+                canvas_ids.append(canvas_user_id)
 
-    for record in canvas_ids:
-        canvas_user_id = record[0]
-        login_id = record[1]
-        for lastaccess_record in lastaccess:
-            if lastaccess_record['user id'] == canvas_user_id:
-                output.append(login_id + ',' + lastaccess_record['last access at'])
-                
+    # Build output from last access records for matching canvas_user_ids, referencing login_id
+    for lastaccess_record in lastaccess:
+        key = lastaccess_record['user id']
+        if key in canvas_ids:
+            output.append(user_index[key]['login_id'] + ',' + lastaccess_record['last access at'])
+
     print "Content-type: text/plain\n"
     output.sort()
     for line in output:
