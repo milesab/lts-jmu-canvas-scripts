@@ -26,7 +26,7 @@ if __name__ == '__main__':
     for search_string in search_strings:
         for canvas_user_id in user_index:
             login_id = user_index[canvas_user_id]['login_id']
-            if search_string in login_id:
+            if search_string.lower() in login_id:
                 canvas_ids.append(canvas_user_id)
 
     # Build output from last access records for matching canvas_user_ids, referencing login_id
