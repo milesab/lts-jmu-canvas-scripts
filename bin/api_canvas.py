@@ -26,6 +26,8 @@ def job_status(job_arg,endpoint_arg):
         endpoint = 'accounts/%s/sis_imports/%s.json?access_token=%s' % (account_id,job_id,access_token)
     elif endpoint_arg == 'export':
         endpoint = 'accounts/%s/reports/provisioning_csv/%s?access_token=%s' % (account_id,job_id,access_token)
+    elif endpoint_arg == 'last_user_access_csv':
+        endpoint = 'accounts/%s/reports/last_user_access_csv/%s?access_token=%s' % (account_id,job_id,access_token)
     else:
         endpoint = endpoint_arg
 
@@ -93,7 +95,7 @@ def export_submit(export_id_file):
     response_data = json.loads(response)
     export_id = response_data['id']
 
-    # Write import_id to text file for future reference
+    # Write export_id to text file for future reference
     id_file = open(export_id_file,'w')
     id_file.write("%s" % export_id)
     id_file.close()
@@ -113,6 +115,30 @@ def export_download(file_url,export_file):
         os.remove(export_file)
     except OSError:
         pass
+
+
+# Submit report request to canvas, save most recent job_id to check status
+def report_submit(report,params,report_id_file):
+    endpoint = base_url + 'accounts/%s/reports/%s' % (account_id,report)
+    params = json.dumps(params)
+    request = urllib2.Request(endpoint,params,{'Content-type': 'application/json','Authorization':'Bearer %s' % access_token})
+    response = urllib2.urlopen(request).read().strip()
+    response_data = json.loads(response)
+    report_id = response_data['id']
+
+    # Write report_id to text file for future reference
+    id_file = open(report_id_file,'w')
+    id_file.write("%s" % report_id)
+    id_file.close()
+
+
+# Retrieve report 
+def report_download(file_url,report_file):
+    report_request = urllib2.Request(file_url,None,{'Authorization':'Bearer %s' % access_token})
+    report_data = urllib2.urlopen(file_url)
+    dl_file = open(report_file, 'w')
+    dl_file.write(report_data.read())
+    dl_file.close()
 
 
 # Get list of students in a course
