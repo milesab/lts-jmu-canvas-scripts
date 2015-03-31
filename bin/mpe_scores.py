@@ -75,13 +75,13 @@ def create_scorefile():
                             p3score, p3time = qscore, qtime
                         if int(quiz) == int(mpe_quiz4):
                             p4score, p4time = qscore, qtime
-    if not None in (p1score, p2score, p3score, p4score):
-        gmt_timestamp = datetime.strptime(max(p1time, p2time, p3time, p4time), '%Y-%m-%dT%H:%M:%SZ')
-        mpe_timestamp = gmt.localize(gmt_timestamp).astimezone(ltz)
-        if mpe_timestamp > lastscore:
-            if student_id in open(scores_file).read():
+        if not None in (p1score, p2score, p3score, p4score):
+            gmt_timestamp = datetime.strptime(max(p1time, p2time, p3time, p4time), '%Y-%m-%dT%H:%M:%SZ')
+            mpe_timestamp = gmt.localize(gmt_timestamp).astimezone(ltz)
+            if mpe_timestamp > lastscore:
+                if student_id in open(scores_file).read():
                     logging.info('Skipping duplicate score - %s' % student_id)
-            else:
+                else:
                     logging.info('Adding new score - %s' % student_id)
                     calc_score = str(int(p1score) + int(p2score) + int(p3score)).zfill(4) + '00'
                     calc_time = datetime.strptime(max(p1time, p2time, p3time), '%Y-%m-%dT%H:%M:%SZ').strftime('%m%d%Y')
