@@ -111,10 +111,6 @@ def export_download(file_url,export_file):
         for subfile in zip_file.namelist():
             zip_file.extract(subfile,export_dir)
         dl_file.close()
-    try:
-        os.remove(export_file)
-    except OSError:
-        pass
 
 
 # Submit report request to canvas, save most recent job_id to check status
