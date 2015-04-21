@@ -93,10 +93,9 @@ def create_scorefile():
 
 
 # Archive and publish score file
-def publish_scorefile():
+def publish_scorefile(timestamp):
     shutil.copy2(scores_file,import_dir + 'math_placement/mathp_jsa0005.dat')
     if os.stat(scores_file).st_size > 0:
-        timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
         shutil.copy2(scores_file,easel_home + 'data/mpe/scores-%s.txt' % timestamp)
 
 
@@ -116,9 +115,10 @@ if __name__ == '__main__':
         else:
             teststudent_id = student['id']
 
+    timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
     score_data = api_canvas.get_scores(student_data,mpe_course_id)
     create_scorefile()
-    publish_scorefile()
+    publish_scorefile(timestamp)
 
     # Save students data for troubleshooting
     fout = open(easel_home + 'data/temp/mpe_student_data.json', 'w')
