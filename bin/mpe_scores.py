@@ -61,20 +61,20 @@ def create_scorefile():
         file = open(scores_file, 'w')
     for student in score_data:
         if not student['user_id'] == teststudent_id:
-                p1score, p2score, p3score, p4score = None, None, None, None
-                key = student['user_id']
-                student_id = student_ids[key]
-                for sub in student['submissions']:
-                    user_id, quiz, qscore, qtime = sub['user_id'], sub['assignment_id'], sub['score'], sub['submitted_at']
-                    if user_id == key:
-                        if int(quiz) == int(mpe_quiz1):
-                            p1score, p1time = qscore, qtime
-                        if int(quiz) == int(mpe_quiz2):
-                            p2score, p2time = qscore, qtime
-                        if int(quiz) == int(mpe_quiz3):
-                            p3score, p3time = qscore, qtime
-                        if int(quiz) == int(mpe_quiz4):
-                            p4score, p4time = qscore, qtime
+            p1score, p2score, p3score, p4score = None, None, None, None
+            key = student['user_id']
+            student_id = student_ids[key]
+            for sub in student['submissions']:
+                user_id, quiz, qscore, qtime = sub['user_id'], sub['assignment_id'], sub['score'], sub['submitted_at']
+                if user_id == key:
+                    if int(quiz) == int(mpe_quiz1):
+                        p1score, p1time = qscore, qtime
+                    if int(quiz) == int(mpe_quiz2):
+                        p2score, p2time = qscore, qtime
+                    if int(quiz) == int(mpe_quiz3):
+                        p3score, p3time = qscore, qtime
+                    if int(quiz) == int(mpe_quiz4):
+                        p4score, p4time = qscore, qtime
         if not None in (p1score, p2score, p3score, p4score):
             gmt_timestamp = datetime.strptime(max(p1time, p2time, p3time, p4time), '%Y-%m-%dT%H:%M:%SZ')
             mpe_timestamp = gmt.localize(gmt_timestamp).astimezone(ltz)
