@@ -137,10 +137,19 @@ def report_download(file_url,report_file):
     dl_file.close()
 
 
+# Get list of sections in a course
+def get_courseinfo(course_id):
+    courseinfo_endpoint = base_url + 'courses/%s' % course_id
+    courseinfo_request = urllib2.Request(courseinfo_endpoint,None,{'Authorization':'Bearer %s' % access_token})
+    courseinfo_response = urllib2.urlopen(courseinfo_request).read().strip()
+    return json.loads(courseinfo_response)
+
+
 # Get list of students in a course
 def get_students(course_id):
     students_endpoint = base_url + 'courses/%s/users' % course_id
-    student_request = urllib2.Request(students_endpoint,None,{'Authorization':'Bearer %s' % access_token})
+    params = urllib.urlencode([('enrollment_type','student')])
+    student_request = urllib2.Request(students_endpoint + "?" + params,None,{'Authorization':'Bearer %s' % access_token})
     student_response = urllib2.urlopen(student_request).read().strip()
     return json.loads(student_response)
 
