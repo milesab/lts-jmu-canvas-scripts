@@ -14,6 +14,7 @@
         "easel_home": "/usr/local/easel/",
         "import_dir": "/usr/local/easel/data/import/",
         "export_dir": "/usr/local/easel/data/export/",
+        "report_dir": "/usr/local/easel/data/report/",
         "log_dir": "/usr/local/easel/logs/"
     },
     "mpe": {
@@ -22,5 +23,9 @@
         "quiz2": "123452",
         "quiz3": "123453",
         "quiz4": "123454"
+    },
+    "title_ix": {
+        "course_id": "543210",
+        "quiz_id": "543211"
     }
 }
