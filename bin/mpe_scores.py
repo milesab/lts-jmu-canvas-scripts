@@ -9,6 +9,7 @@ easel_home = config['local']['easel_home']
 import_dir = config['local']['import_dir']
 scores_file = easel_home + 'data/temp/mpe_scores.txt'
 logging.basicConfig(filename=config['local']['log_dir'] + 'mpe_scores.log',level=logging.INFO)
+logging.getLogger("requests").setLevel(logging.WARNING)
 mpe_course_id = config['mpe']['course_id']
 mpe_quiz1 = config['mpe']['quiz1']
 mpe_quiz2 = config['mpe']['quiz2']

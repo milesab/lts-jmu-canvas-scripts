@@ -9,6 +9,7 @@ easel_home = config['local']['easel_home']
 import_dir = config['local']['import_dir']
 scores_file = easel_home + 'data/temp/title_ix_scores.txt'
 logging.basicConfig(filename=config['local']['log_dir'] + 'title_ix_scores.log',level=logging.INFO)
+logging.getLogger("requests").setLevel(logging.WARNING)
 title_ix_course_id = config['title_ix']['course_id']
 title_ix_quiz_id = config['title_ix']['quiz_id']
 
