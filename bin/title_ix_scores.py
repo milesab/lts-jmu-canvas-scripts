@@ -85,7 +85,7 @@ def create_scorefile():
 
 # Archive and publish score file
 def publish_scorefile(timestamp):
-    shutil.copy2(scores_file,import_dir + 'title_ix/titleix_jsa0005.dat')
+    shutil.copy2(scores_file,import_dir + 'title_ix/titleix_jhr078.dat')
     if os.stat(scores_file).st_size > 0:
         shutil.copy2(scores_file,easel_home + 'data/title_ix/scores-%s.txt' % timestamp)
 
