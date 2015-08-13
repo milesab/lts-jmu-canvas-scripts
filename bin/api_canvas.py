@@ -150,8 +150,8 @@ def get_courseinfo(course_id):
 # Get list of students in a course
 def get_students(course_id):
     students = []
-    students_endpoint = base_url + 'courses/%s/users?per_page=100' % course_id
-    request_headers = {'enrollment_type':'student','Authorization':'Bearer %s' % access_token}
+    students_endpoint = base_url + 'courses/%s/users?enrollment_type=student&per_page=100' % course_id
+    request_headers = {'Authorization':'Bearer %s' % access_token}
     url = students_endpoint
     more_pages = True
     while more_pages:
