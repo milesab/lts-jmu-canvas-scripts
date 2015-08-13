@@ -1,6 +1,8 @@
 import os, fnmatch, zipfile
 import urllib, urllib2, MultipartPostHandler, json
 import api_local
+import requests
+requests.packages.urllib3.disable_warnings()
 
 config = api_local.get_config()
 account_id = config['canvas']['account_id']
@@ -147,11 +149,19 @@ def get_courseinfo(course_id):
 
 # Get list of students in a course
 def get_students(course_id):
-    students_endpoint = base_url + 'courses/%s/users' % course_id
-    params = urllib.urlencode([('enrollment_type','student')])
-    student_request = urllib2.Request(students_endpoint + "?" + params,None,{'Authorization':'Bearer %s' % access_token})
-    student_response = urllib2.urlopen(student_request).read().strip()
-    return json.loads(student_response)
+    students = []
+    students_endpoint = base_url + 'courses/%s/users?per_page=100' % course_id
+    request_headers = {'enrollment_type':'student','Authorization':'Bearer %s' % access_token}
+    url = students_endpoint
+    more_pages = True
+    while more_pages:
+        student_request = requests.get(url,headers=request_headers)
+        students+=student_request.json()
+        if 'next' in student_request.links.keys():
+            url = student_request.links['next']['url']
+        else:
+            more_pages = False
+    return students
 
 
 # Get list of sections in a course
