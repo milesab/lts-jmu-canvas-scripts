@@ -14,6 +14,7 @@
         "easel_home": "/usr/local/easel/",
         "import_dir": "/usr/local/easel/data/import/",
         "export_dir": "/usr/local/easel/data/export/",
+        "export_age": "5",
         "report_dir": "/usr/local/easel/data/report/",
         "log_dir": "/usr/local/easel/logs/"
     },
