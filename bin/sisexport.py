@@ -6,6 +6,7 @@ easel_home = config['local']['easel_home']
 export_file = easel_home + 'data/temp/sisexport.zip'
 export_id_file = easel_home + 'data/temp/sisexport_id.txt'
 export_dir = config['local']['export_dir']
+export_age = config['local']['export_age']
 
 
 # Generate new export
@@ -27,7 +28,7 @@ def generate_export():
 def export_time():
     if os.path.isfile(export_dir + 'courses.csv'):
         t = os.path.getmtime(export_dir + 'courses.csv')
-        if (datetime.datetime.today() - datetime.datetime.fromtimestamp(t)) < datetime.timedelta(hours=5):
+        if (datetime.datetime.today() - datetime.datetime.fromtimestamp(t)) < datetime.timedelta(hours=int(export_age)):
             return False
         else:
             return True
