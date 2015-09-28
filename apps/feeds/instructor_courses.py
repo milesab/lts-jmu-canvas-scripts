@@ -15,9 +15,9 @@ if __name__ == '__main__':
     output = []
     
     for instructor in instructors:
-        output.append("\nInstructor: %s\n\ncourse_id (canvas_course_id)\tsection_id (canvas_section_id)" % teacher)
+        output.append("\nInstructor: %s\n\ncourse_id (canvas_course_id)\tsection_id (canvas_section_id)" % instructor)
         for enrollment in enrollments:
-            if enrollment['role'] == "teacher" and enrollment['user_id'] == teacher:
+            if enrollment['role'] == "teacher" and enrollment['user_id'] == instructor:
                 cid = enrollment['course_id']
                 ccid = enrollment['canvas_course_id']
                 sid = enrollment['section_id']
