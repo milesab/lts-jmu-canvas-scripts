@@ -28,9 +28,9 @@ if __name__ == '__main__':
     try:
         include = params['include']
         if include.lower() == 'all':
-            include = ['student','teacher']
+            include = ['student','teacher','ta']
     except:
-        include = ['student','teacher']
+        include = ['student','teacher','ta']
 
     if courses:
         users = api_local.read_csv(export_dir + 'users.csv', 'canvas_user_id')
@@ -51,6 +51,7 @@ if __name__ == '__main__':
         total = 0
         students = []
         teachers = []
+        tas = []
         output = []
 
         for enrollment in enrollments:
@@ -66,7 +67,12 @@ if __name__ == '__main__':
                 canvas_id = enrollment['canvas_user_id']
                 user_record = user_index[canvas_id]
                 teachers.append((course_id,user_record)) 
-        
+            elif role == "ta" and "ta" in include and course_id in courses:
+                    total +=1
+                    canvas_id = enrollment['canvas_user_id']
+                    user_record = user_index[canvas_id]
+                    tas.append((course_id,user_record)) 
+
         if format.lower() == "xml":
             output.append("X-Enrollment-count: %s" % total)
             output.append("Content-type: text/plain\n")
@@ -83,6 +89,18 @@ if __name__ == '__main__':
                     output.append("\t\t<middlename></middlename>\n\t\t<startdate></startdate>")
                     output.append("\t\t<teacherID>%s</teacherID>\n\t</teacher>" % teacher[1]['login_id'])            
                 output.append("</teachers>")
+            if tas:
+                output.append("<tas>")
+                for ta in tas:
+                    output.append("\t<ta username=\"%s\">" % ta[1]['login_id'])
+                    output.append("\t\t<autharg></autharg>\n\t\t<authtype>localauth</authtype>")
+                    output.append("\t\t<email>%s</email>\n\t\t<enddate></enddate>" % ta[1]['email'])
+                    output.append("\t\t<firstname>%s</firstname>" % ta[1]['first_name'])
+                    output.append("\t\t<groupID>%s</groupID>" % ta[0])
+                    output.append("\t\t<lastname>%s</lastname>" % ta[1]['last_name'])
+                    output.append("\t\t<middlename></middlename>\n\t\t<startdate></startdate>")
+                    output.append("\t\t<taID>%s</taID>\n\t</ta>" % ta[1]['login_id'])            
+                output.append("</tas>")
             if students:
                 output.append("<students>")
                 for student in students:
