@@ -76,9 +76,8 @@ if __name__ == '__main__':
         if format.lower() == "xml":
             output.append("X-Enrollment-count: %s" % total)
             output.append("Content-type: text/plain\n")
-            output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>")
+            output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>\n<enrollments>")
             if teachers:
-                output.append("<teachers>")
                 for teacher in teachers:
                     output.append("\t<teacher username=\"%s\">" % teacher[1]['login_id'])
                     output.append("\t\t<autharg></autharg>\n\t\t<authtype>localauth</authtype>")
@@ -88,9 +87,7 @@ if __name__ == '__main__':
                     output.append("\t\t<lastname>%s</lastname>" % teacher[1]['last_name'])
                     output.append("\t\t<middlename></middlename>\n\t\t<startdate></startdate>")
                     output.append("\t\t<teacherID>%s</teacherID>\n\t</teacher>" % teacher[1]['login_id'])            
-                output.append("</teachers>")
             if tas:
-                output.append("<tas>")
                 for ta in tas:
                     output.append("\t<ta username=\"%s\">" % ta[1]['login_id'])
                     output.append("\t\t<autharg></autharg>\n\t\t<authtype>localauth</authtype>")
@@ -100,9 +97,7 @@ if __name__ == '__main__':
                     output.append("\t\t<lastname>%s</lastname>" % ta[1]['last_name'])
                     output.append("\t\t<middlename></middlename>\n\t\t<startdate></startdate>")
                     output.append("\t\t<taID>%s</taID>\n\t</ta>" % ta[1]['login_id'])            
-                output.append("</tas>")
             if students:
-                output.append("<students>")
                 for student in students:
                     output.append("\t<student username=\"%s\">" % student[1]['login_id'])
                     output.append("\t\t<autharg></autharg>\n\t\t<authtype>localauth</authtype>")
@@ -112,7 +107,7 @@ if __name__ == '__main__':
                     output.append("\t\t<lastname>%s</lastname>" % student[1]['last_name'])
                     output.append("\t\t<middlename></middlename>\n\t\t<startdate></startdate>")
                     output.append("\t\t<studentID>%s</studentID>\n\t</student>" % student[1]['login_id'])
-                output.append("</students>")
+            output.append("</enrollments>")
 
         if format.lower() == "flat":
             output.append("Content-type: text/plain\n")
