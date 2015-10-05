@@ -121,6 +121,11 @@ if __name__ == '__main__':
                 (teacher[1]['login_id'],teacher[1]['email'],teacher[1]['first_name'],teacher[1]['last_name'])
                 if not entry in output:
                     output.append(entry)
+            for ta in tas:
+                entry = "ta\t%s\t%s\t%s\t%s" % \
+                (ta[1]['login_id'],ta[1]['email'],ta[1]['first_name'],ta[1]['last_name'])
+                if not entry in output:
+                    output.append(entry)
             for student in students:
                 entry = "student\t%s\t%s\t%s\t%s" % \
                 (student[1]['login_id'],student[1]['email'],student[1]['first_name'],student[1]['last_name'])
