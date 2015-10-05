@@ -77,6 +77,7 @@ if __name__ == '__main__':
             output.append("X-Enrollment-count: %s" % total)
             output.append("Content-type: text/plain\n")
             output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>")
+            
             if not teachers and not tas:
                 output.append("<students>")
             else:
