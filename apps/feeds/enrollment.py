@@ -76,7 +76,12 @@ if __name__ == '__main__':
         if format.lower() == "xml":
             output.append("X-Enrollment-count: %s" % total)
             output.append("Content-type: text/plain\n")
-            output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>\n<students>")
+            output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>")
+            if not teachers and not tas:
+                output.append("<students>")
+            else:
+                output.append("<enrollments>")
+
             if teachers:
                 for teacher in teachers:
                     output.append("\t<teacher username=\"%s\">" % teacher[1]['login_id'])
@@ -107,7 +112,11 @@ if __name__ == '__main__':
                     output.append("\t\t<lastname>%s</lastname>" % student[1]['last_name'])
                     output.append("\t\t<middlename></middlename>\n\t\t<startdate></startdate>")
                     output.append("\t\t<studentID>%s</studentID>\n\t</student>" % student[1]['login_id'])
-            output.append("</students>")
+
+            if not teachers and not tas:
+                output.append("</students>")
+            else:
+                output.append("</enrollments>")
 
         if format.lower() == "flat":
             output.append("Content-type: text/plain\n")
