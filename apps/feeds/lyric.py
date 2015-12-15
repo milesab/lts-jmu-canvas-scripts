@@ -38,11 +38,11 @@ def xlist_courses():
 
 if __name__ == '__main__':
 
-    params = get_params(cgi.FieldStorage())
+    #params = get_params(cgi.FieldStorage())
 
-    #params = {}
-    #params['id'] = 'BIO103'
-    #params['url'] = 'http://guides.lib.jmu.edu/anatomy'
+    params = {}
+    params['id'] = 'BIO103'
+    params['url'] = 'http://guides.lib.jmu.edu/anatomy'
 
     try:
         course_id = params['id'].rstrip().replace("default","")
@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     if show_courses and url:    
         output.append("Content-type: text/xml\n")
-        output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+        output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>")
 
         for course in show_courses:
             try:
