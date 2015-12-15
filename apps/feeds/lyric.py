@@ -86,5 +86,10 @@ if __name__ == '__main__':
             except IOError:
                 pass
 
-    for line in output:
-        print line
+        for line in output:
+            print line
+
+    else:
+        print "Content-type: text/plain\n"
+        print "Lyric XML Feed\n\nParameters:\n\tsem=semester [SP/SM/FA][YY] (default: current)"
+        print "\tid=course_id string match (required)\n\turl=URL to include in XML output (required)"
