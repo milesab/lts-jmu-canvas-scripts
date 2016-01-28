@@ -76,7 +76,7 @@ def create_scorefile():
                         p3score, p3time = qscore, qtime
                     if int(quiz) == int(mpe_quiz4):
                         p4score, p4time = qscore, qtime
-        if not None in (p1score, p2score, p3score, p4score):
+        if not None in (p1score, p2score, p3score, p4score, p1time, p2time, p3time, p4time):
             gmt_timestamp = datetime.strptime(max(p1time, p2time, p3time, p4time), '%Y-%m-%dT%H:%M:%SZ')
             mpe_timestamp = gmt.localize(gmt_timestamp).astimezone(ltz)
             if mpe_timestamp > lastscore:
@@ -109,6 +109,12 @@ if __name__ == '__main__':
     teststudent_id = None
     student_ids = {}
     student_data = api_canvas.get_students(mpe_course_id)
+
+    # Save students data for troubleshooting
+    fout = open(easel_home + 'data/temp/mpe_student_data.json', 'w')
+    json.dump(student_data,fout)
+    fout.close
+
     for student in student_data:
         if not student['name'] == "Test Student":
             key, value = student['id'], student['sis_user_id']
@@ -118,15 +124,11 @@ if __name__ == '__main__':
 
     timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
     score_data = api_canvas.get_scores(student_data,mpe_course_id)
-    create_scorefile()
-    publish_scorefile(timestamp)
-
-    # Save students data for troubleshooting
-    fout = open(easel_home + 'data/temp/mpe_student_data.json', 'w')
-    json.dump(student_data,fout)
-    fout.close
 
     # Save grades data for troubleshooting
     fout = open(easel_home + 'data/temp/mpe_score_data.json', 'w')
     json.dump(score_data,fout)
     fout.close
+
+    create_scorefile()
+    publish_scorefile(timestamp)

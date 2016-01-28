@@ -71,7 +71,7 @@ def create_scorefile():
                 if user_id == student['user_id']:
                     if int(quiz) == int(title_ix_quiz_id):
                         tixscore, tixtime = qscore, qtime
-        if tixscore:
+        if not None in (tixscore, tixtime):
             gmt_timestamp = datetime.strptime(tixtime, '%Y-%m-%dT%H:%M:%SZ')
             title_ix_timestamp = gmt.localize(gmt_timestamp).astimezone(ltz)
             if title_ix_timestamp > lastscore:
@@ -100,6 +100,12 @@ if __name__ == '__main__':
     teststudent_id = None
     student_ids = {}
     student_data = api_canvas.get_students(title_ix_course_id)
+
+    # Save students data for troubleshooting
+    fout = open(easel_home + 'data/temp/title_ix_student_data.json', 'w')
+    json.dump(student_data,fout)
+    fout.close
+
     for student in student_data:
         if not student['name'] == "Test Student":
             key, value = student['id'], student['sis_user_id']
@@ -110,26 +116,23 @@ if __name__ == '__main__':
     # Map section ID to sis_section_id
     section_ids = {}
     section_data = api_canvas.get_sections(title_ix_course_id)
-    for section in section_data:
-        key, value = section['id'], section['sis_section_id']
-        section_ids[key] = value
-
-    timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
-    score_data = api_canvas.get_scores(student_data,title_ix_course_id)
-    create_scorefile()
-    publish_scorefile(timestamp)
-
-    # Save students data for troubleshooting
-    fout = open(easel_home + 'data/temp/title_ix_student_data.json', 'w')
-    json.dump(student_data,fout)
-    fout.close
 
     # Save section data for troubleshooting
     fout = open(easel_home + 'data/temp/title_ix_section_data.json', 'w')
     json.dump(section_data,fout)
     fout.close
 
+    for section in section_data:
+        key, value = section['id'], section['sis_section_id']
+        section_ids[key] = value
+
+    timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
+    score_data = api_canvas.get_scores(student_data,title_ix_course_id)
+
     # Save grades data for troubleshooting
     fout = open(easel_home + 'data/temp/title_ix_score_data.json', 'w')
     json.dump(score_data,fout)
     fout.close
+
+    create_scorefile()
+    publish_scorefile(timestamp)
