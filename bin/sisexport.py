@@ -6,8 +6,8 @@ easel_home = config['local']['easel_home']
 export_file = easel_home + 'data/temp/sisexport.zip'
 export_id_file = easel_home + 'data/temp/sisexport_id.txt'
 export_dir = config['local']['export_dir']
-export_age = config['local']['export_age']
-
+export_age = int(config['local']['export_age'])
+export_checkfile = export_dir + 'courses.csv'
 
 # Generate new export
 def generate_export():
@@ -24,19 +24,7 @@ def generate_export():
         print "Export download failed, keeping previous export"
 
 
-# Check if export has been updated in the last 5 hours
-def export_time():
-    if os.path.isfile(export_dir + 'courses.csv'):
-        t = os.path.getmtime(export_dir + 'courses.csv')
-        if (datetime.datetime.today() - datetime.datetime.fromtimestamp(t)) < datetime.timedelta(hours=int(export_age)):
-            return False
-        else:
-            return True
-    else:
-        return True
-
-
 if __name__ == '__main__':
 
-    if export_time():
+    if api_local.file_age(export_checkfile) > export_age:
         generate_export()
