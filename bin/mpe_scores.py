@@ -8,6 +8,8 @@ config = api_local.get_config()
 easel_home = config['local']['easel_home']
 import_dir = config['local']['import_dir']
 scores_file = easel_home + 'data/temp/mpe_scores.txt'
+mpe_student_data = easel_home + 'data/temp/mpe_student_data.json'
+mpe_score_data = easel_home + 'data/temp/mpe_score_data.json'
 logging.basicConfig(filename=config['local']['log_dir'] + 'mpe_scores.log',level=logging.INFO)
 logging.getLogger("requests").setLevel(logging.WARNING)
 mpe_course_id = config['mpe']['course_id']
@@ -15,6 +17,7 @@ mpe_quiz1 = config['mpe']['quiz1']
 mpe_quiz2 = config['mpe']['quiz2']
 mpe_quiz3 = config['mpe']['quiz3']
 mpe_quiz4 = config['mpe']['quiz4']
+
 
 # Time Zone Definitions
 gmt = pytz.timezone('GMT')
@@ -63,19 +66,23 @@ def create_scorefile():
     for student in score_data:
         if not student['user_id'] == teststudent_id:
             p1score, p2score, p3score, p4score = None, None, None, None
-            key = student['user_id']
-            student_id = student_ids[key]
-            for sub in student['submissions']:
-                user_id, quiz, qscore, qtime = sub['user_id'], sub['assignment_id'], sub['score'], sub['submitted_at']
-                if user_id == key:
-                    if int(quiz) == int(mpe_quiz1):
-                        p1score, p1time = qscore, qtime
-                    if int(quiz) == int(mpe_quiz2):
-                        p2score, p2time = qscore, qtime
-                    if int(quiz) == int(mpe_quiz3):
-                        p3score, p3time = qscore, qtime
-                    if int(quiz) == int(mpe_quiz4):
-                        p4score, p4time = qscore, qtime
+            try:
+                student_id = student_ids[student['user_id']]
+            except:
+                student_id = None
+                logging.info('User ID missing - %s' % student)
+            if student_id:
+                for sub in student['submissions']:
+                    user_id, quiz, qscore, qtime = sub['user_id'], sub['assignment_id'], sub['score'], sub['submitted_at']
+                    if user_id == student['user_id']:
+                        if int(quiz) == int(mpe_quiz1):
+                            p1score, p1time = qscore, qtime
+                        if int(quiz) == int(mpe_quiz2):
+                            p2score, p2time = qscore, qtime
+                        if int(quiz) == int(mpe_quiz3):
+                            p3score, p3time = qscore, qtime
+                        if int(quiz) == int(mpe_quiz4):
+                            p4score, p4time = qscore, qtime
         if not None in (p1score, p2score, p3score, p4score, p1time, p2time, p3time, p4time):
             gmt_timestamp = datetime.strptime(max(p1time, p2time, p3time, p4time), '%Y-%m-%dT%H:%M:%SZ')
             mpe_timestamp = gmt.localize(gmt_timestamp).astimezone(ltz)
@@ -108,12 +115,16 @@ if __name__ == '__main__':
     # Map student ID to sis_id
     teststudent_id = None
     student_ids = {}
-    student_data = api_canvas.get_students(mpe_course_id)
 
-    # Save students data for troubleshooting
-    fout = open(easel_home + 'data/temp/mpe_student_data.json', 'w')
-    json.dump(student_data,fout)
-    fout.close
+    # Fetch and save new student data if cached data is over 5 hours old, otherwise use cached data
+    if api_local.file_age(mpe_student_data) > 5:
+        student_data = api_canvas.get_students(mpe_course_id)
+        fout = open(mpe_student_data, 'w')
+        json.dump(student_data,fout)
+        fout.close
+    else:
+        with open(mpe_student_data) as student_data_file:
+            student_data = json.load(student_data_file)
 
     for student in student_data:
         if not student['name'] == "Test Student":
@@ -123,12 +134,16 @@ if __name__ == '__main__':
             teststudent_id = student['id']
 
     timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
-    score_data = api_canvas.get_scores(student_data,mpe_course_id)
 
-    # Save grades data for troubleshooting
-    fout = open(easel_home + 'data/temp/mpe_score_data.json', 'w')
-    json.dump(score_data,fout)
-    fout.close
+    # Fetch and save new score data if cached data is over 5 hours old, otherwise use cached data
+    if api_local.file_age(mpe_score_data) > 5:
+        score_data = api_canvas.get_scores(student_data,mpe_course_id)
+        fout = open(mpe_score_data, 'w')
+        json.dump(score_data,fout)
+        fout.close
+    else:
+        with open (mpe_score_data) as score_data_file:
+            score_data = json.load(score_data_file)
 
     create_scorefile()
     publish_scorefile(timestamp)
