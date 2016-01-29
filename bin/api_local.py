@@ -1,4 +1,4 @@
-import os, json, csv
+import os, json, csv, datetime
 
 # Load local application settings
 def get_config():
@@ -38,3 +38,12 @@ def diff_enroll(first,second):
 # Build index from data and key
 def build_index(data,key):
     return dict((d[key], dict(d, index=i)) for (i,d) in enumerate(data))
+
+
+# Return number of hours since file was last modified
+def file_age(filename):
+    if os.path.isfile(filename):
+        filename_time = datetime.datetime.fromtimestamp(os.path.getmtime(filename))
+        current_time = datetime.datetime.today()
+        file_age = (current_time - filename_time).total_seconds() / 3600
+        return int(file_age)
