@@ -132,8 +132,8 @@ if __name__ == '__main__':
     # Map section ID to sis_section_id
     section_ids = {}
 
-    # Fetch and save new section data if cached data is over 5 hours old, otherwise use cached data
-    if api_local.file_age(title_ix_section_data) > 5:
+    # Fetch and save new section data if cached data is over 12 hours old, otherwise use cached data
+    if api_local.file_age(title_ix_section_data) > 12:
         section_data = api_canvas.get_sections(title_ix_course_id)
         fout = open(title_ix_section_data, 'w')
         json.dump(section_data,fout)
