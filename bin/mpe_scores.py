@@ -116,8 +116,8 @@ if __name__ == '__main__':
     teststudent_id = None
     student_ids = {}
 
-    # Fetch and save new student data if cached data is over 5 hours old, otherwise use cached data
-    if api_local.file_age(mpe_student_data) > 5:
+    # Fetch and save new student data if cached data is over 1 hour old, otherwise use cached data
+    if api_local.file_age(mpe_student_data) > 1:
         student_data = api_canvas.get_students(mpe_course_id)
         fout = open(mpe_student_data, 'w')
         json.dump(student_data,fout)
@@ -135,8 +135,8 @@ if __name__ == '__main__':
 
     timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
 
-    # Fetch and save new score data if cached data is over 5 hours old, otherwise use cached data
-    if api_local.file_age(mpe_score_data) > 5:
+    # Fetch and save new score data if cached data is over 1 hour old, otherwise use cached data
+    if api_local.file_age(mpe_score_data) > 1:
         score_data = api_canvas.get_scores(student_data,mpe_course_id)
         fout = open(mpe_score_data, 'w')
         json.dump(score_data,fout)
