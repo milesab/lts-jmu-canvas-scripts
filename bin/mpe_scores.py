@@ -66,6 +66,7 @@ def create_scorefile():
     for student in score_data:
         if not student['user_id'] == teststudent_id:
             p1score, p2score, p3score, p4score = None, None, None, None
+            p1time, p2time, p3time, p4time = None, None, None, None
             try:
                 student_id = student_ids[student['user_id']]
             except:
