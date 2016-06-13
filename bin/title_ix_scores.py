@@ -119,7 +119,7 @@ if __name__ == '__main__':
         json.dump(student_data,fout)
         fout.close
     else:
-        with open(title_ix_student_data) as student_data_file:
+        with open(title_ix_student_data, 'w') as student_data_file:
             student_data = json.load(student_data_file)
 
     for student in student_data:
@@ -139,7 +139,7 @@ if __name__ == '__main__':
         json.dump(section_data,fout)
         fout.close
     else:
-        with open(title_ix_section_data) as section_data_file:
+        with open(title_ix_section_data, 'w') as section_data_file:
             section_data = json.load(section_data_file)
 
     for section in section_data:
@@ -155,7 +155,7 @@ if __name__ == '__main__':
         json.dump(score_data,fout)
         fout.close
     else:
-        with open(title_ix_score_data) as score_data_file:
+        with open(title_ix_score_data, 'w') as score_data_file:
             score_data = json.load(score_data_file)
 
     create_scorefile()
