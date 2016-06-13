@@ -113,13 +113,13 @@ if __name__ == '__main__':
     student_ids = {}
 
     # Fetch and save new student data if cached data is over 12 hours old, otherwise use cached data
-    if api_local.file_age(title_ix_student_data) > 12:
+    if api_local.file_age(title_ix_student_data) is None or api_local.file_age(title_ix_student_data) > 12:
         student_data = api_canvas.get_students(title_ix_course_id)
         fout = open(title_ix_student_data, 'w')
         json.dump(student_data,fout)
         fout.close
     else:
-        with open(title_ix_student_data, 'w') as student_data_file:
+        with open(title_ix_student_data) as student_data_file:
             student_data = json.load(student_data_file)
 
     for student in student_data:
@@ -133,13 +133,13 @@ if __name__ == '__main__':
     section_ids = {}
 
     # Fetch and save new section data if cached data is over 12 hours old, otherwise use cached data
-    if api_local.file_age(title_ix_section_data) > 12:
+    if api_local.file_age(title_ix_section_data) is None or api_local.file_age(title_ix_section_data) > 12:
         section_data = api_canvas.get_sections(title_ix_course_id)
         fout = open(title_ix_section_data, 'w')
         json.dump(section_data,fout)
         fout.close
     else:
-        with open(title_ix_section_data, 'w') as section_data_file:
+        with open(title_ix_section_data) as section_data_file:
             section_data = json.load(section_data_file)
 
     for section in section_data:
@@ -149,13 +149,13 @@ if __name__ == '__main__':
     timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
 
     # Fetch and save new score data if cached data is over 12 hours old, otherwise use cached data
-    if api_local.file_age(title_ix_score_data) > 12:
+    if api_local.file_age(title_ix_score_data) is None or api_local.file_age(title_ix_score_data) > 12:
         score_data = api_canvas.get_scores(student_data,title_ix_course_id)
         fout = open(title_ix_score_data, 'w')
         json.dump(score_data,fout)
         fout.close
     else:
-        with open(title_ix_score_data, 'w') as score_data_file:
+        with open(title_ix_score_data) as score_data_file:
             score_data = json.load(score_data_file)
 
     create_scorefile()

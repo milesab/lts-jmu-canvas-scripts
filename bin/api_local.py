@@ -47,3 +47,5 @@ def file_age(filename):
         current_time = datetime.datetime.today()
         file_age = (current_time - filename_time).total_seconds() / 3600
         return int(file_age)
+    else:
+        return None
