@@ -151,6 +151,7 @@ def get_courseinfo(course_id):
 def get_students(course_id):
     students = []
     students_endpoint = base_url + 'courses/%s/users?enrollment_type=student&per_page=100' % course_id
+    #students_endpoint = base_url + 'courses/%s/enrollments?type=StudentEnrollment&per_page=100&page=1' % course_id
     request_headers = {'Authorization':'Bearer %s' % access_token}
     url = students_endpoint
     more_pages = True

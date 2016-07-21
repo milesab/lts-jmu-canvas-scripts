@@ -26,5 +26,5 @@ def generate_export():
 
 if __name__ == '__main__':
 
-    if api_local.file_age(export_checkfile) > export_age:
+    if api_local.file_age(export_checkfile) is None or api_local.file_age(export_checkfile) > export_age:
         generate_export()
