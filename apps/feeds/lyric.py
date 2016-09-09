@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     if show_courses and url:    
         output.append("Content-type: text/plain\n")
-        output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>")
+        output.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE text>\n<count>%s</count>" % len(show_courses))
 
         for course in show_courses:
             try:
