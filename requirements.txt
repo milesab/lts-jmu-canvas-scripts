@@ -1,1 +1,2 @@
 pip install MultipartPostHandler
+pip install requests
