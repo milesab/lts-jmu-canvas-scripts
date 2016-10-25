@@ -128,7 +128,6 @@ if __name__ == '__main__':
             student_data = json.load(student_data_file)
 
     for student in student_data:
-        print json.dumps(student)
         if not student['name'] == "Test Student":
             key, value = student['id'], student['sis_user_id']
             student_ids[key] = value
