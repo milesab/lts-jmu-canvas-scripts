@@ -8,4 +8,8 @@ import_id_file = easel_home + 'data/temp/mpe_importid.txt'
 
 if __name__ == '__main__':
 
+    # Archive a copy of the MPE enrollment file
+    if os.stat(import_file).st_size > 0:
+        shutil.copy2(import_file,easel_home + 'data/mpe/enrollments/mathp_enrollment-%s.csv' % timestamp)
+
     api_canvas.import_submit(import_file,import_id_file)
