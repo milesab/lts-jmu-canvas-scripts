@@ -12,7 +12,7 @@ timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
 if __name__ == '__main__':
 
     # Archive a copy of the MPE enrollment file
-    if os.stat(import_file).st_size > 0:
+    if os.stat(import_file).st_size > 41:
         shutil.copy2(import_file,easel_home + 'data/mpe/enrollments/mathp_enrollment-%s.csv' % timestamp)
 
     api_canvas.import_submit(import_file,import_id_file)
