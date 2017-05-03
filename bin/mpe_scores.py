@@ -132,8 +132,9 @@ if __name__ == '__main__':
 
     for student in student_data:
         if not student['name'] == "Test Student":
-            key, value = student['id'], student['sis_user_id']
-            student_ids[key] = value
+            if 'id' and 'sis_user_id' in student:
+                key, value = student['id'], student['sis_user_id']
+                student_ids[key] = value
         else:
             teststudent_id = student['id']
 
