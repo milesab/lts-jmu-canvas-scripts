@@ -2,4 +2,5 @@
 web.config
 *.pyc
 conf/settings.json
+conf/settings_test.json
 bin/test.py
