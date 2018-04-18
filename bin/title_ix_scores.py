@@ -79,7 +79,7 @@ def create_scorefile():
                 logging.info('User ID missing - %s' % student)
             if not None in (section_id, student_id):
                 for sub in student['submissions']:
-                    user_id, quiz, qscore, qtime, = sub['user_id'], sub['assignment_id'], sub['score'], sub['submitted_at']
+                    user_id, quiz, qscore, qtime, = sub['user_id'], sub['assignment_id'], sub['score'], sub['graded_at']
                     if user_id == student['user_id']:
                         if int(quiz) == int(title_ix_quiz_id):
                             tixscore, tixtime = qscore, qtime

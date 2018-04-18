@@ -178,7 +178,7 @@ def get_scores(student_data,course_id):
     scores = []
     student_ids = [s['id'] for s in student_data]
     submissions_endpoint = base_url + 'courses/%s/students/submissions' % course_id
-    for group in chunks(student_ids, 50):
+    for group in chunks(student_ids, 10):
         submission_params = [ ('grouped',1)]
         submission_params.extend([('student_ids[]',s) for s in group])
         submission_params = urllib.urlencode(submission_params)
