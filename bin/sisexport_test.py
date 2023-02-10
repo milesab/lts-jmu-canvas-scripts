@@ -11,7 +11,7 @@ export_checkfile = export_dir + 'courses.csv'
 
 # Generate new export
 def generate_export():
-    api_canvas.export_submit(export_id_file)
+    #api_canvas.export_submit(export_id_file)
     export_id = int(open(export_id_file, 'r').read().strip())
     progress = 0
     while progress < 100:

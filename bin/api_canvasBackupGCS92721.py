@@ -109,11 +109,7 @@ def export_submit(export_id_file):
 # Retrieve export and unzip it to the export directory
 def export_download(file_url,export_file):
     headers = {'Authorization': 'Bearer %s' % access_token}
-    proxies = {
-            'https' :  'https://it-secproxy.jmu.edu:3128'
-    }
-
-    export_request = requests.get(file_url,headers=headers,proxies=proxies)
+    export_request = requests.get(file_url,headers=headers)
 
     #export_data = urllib2.urlopen(file_url, context=ssl.ctx)
     with open(export_file, "wb+") as dl_file:

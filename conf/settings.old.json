@@ -1,0 +1,32 @@
+{
+    "environment": {
+        "debug": "0"
+    },
+  "canvas": {
+    "account_id": "81707",
+    "access_token": "19~BrVaq4KuDmjBr8PcBl4zD1ZX8sp36xCiRc8VRLJnMoved2bwujuAh5419oMKjlWx",
+    "base_url": "https://jmu.test.instructure.com/api/v1/"
+  },
+    "local": {
+        "timezone": "US/Eastern",
+        "smtp_server": "mailgw.jmu.edu",
+        "smtp_domain": "jmu.edu",
+        "easel_home": "C:/DataExchange/easel/",
+        "import_dir": "C:/DataExchange/easel/data/import/",
+        "export_dir": "C:/DataExchange/easel/data/export/",
+        "export_age": "5",
+        "report_dir": "C:/DataExchange/easel/data/report/",
+        "log_dir": "C:/DataExchange/easel/logs/"
+    },
+    "mpe": {
+        "course_id": "1164910",
+        "quiz1": "3806307",
+        "quiz2": "3806310",
+        "quiz3": "3806306",
+        "quiz4": "3806309"
+    },
+    "title_ix": {
+        "course_id": "1357676",
+        "quiz_id": "6835461"
+    }
+}

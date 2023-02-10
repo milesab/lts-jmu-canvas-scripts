@@ -17,15 +17,16 @@ def generate_export():
     while progress < 100:
         time.sleep(60)
         progress = api_canvas.job_status(export_id,'export')['progress']
+        print(api_canvas.job_status(export_id,'export'))
     file_url = api_canvas.job_status(export_id,'export')['attachment']['url']
+    import pdb; pdb.set_trace()
     try:
         api_canvas.export_download(file_url,export_file)
-    except Exception as e:
-        print("error: " + str(e))
-        print("Export download failed, keeping previous export")
+    except:
+        print "Export download failed, keeping previous export"
 
 
 if __name__ == '__main__':
+
     if api_local.file_age(export_checkfile) is None or api_local.file_age(export_checkfile) > export_age:
         generate_export()
-		

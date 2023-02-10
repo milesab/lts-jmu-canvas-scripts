@@ -1,5 +1,5 @@
 import os, fnmatch, zipfile
-import urllib, urllib2, MultipartPostHandler, json, ssl
+import urllib, urllib2, MultipartPostHandler, json
 import api_local
 import requests
 requests.packages.urllib3.disable_warnings()
@@ -53,18 +53,15 @@ def import_clear(import_file,import_id_file):
 # Create a zip of the CSV files to import
 def import_zip(import_file,import_dir):
     if os.listdir(import_dir):
-		try:
-			zip = zipfile.ZipFile(import_file, 'w', zipfile.ZIP_DEFLATED)
-			for base, dirs, files in os.walk(import_dir):
-				for d in dirs:
-					dirs.remove(d)
-				for fn in fnmatch.filter(files, '*.csv'):
-					absfn = os.path.join(base, fn)
-					zfn = absfn[len(os.path.join(import_dir)):]
-					zip.write(absfn, zfn)
-			zip.close()
-		except:
-			pass		
+        zip = zipfile.ZipFile(import_file, 'w', zipfile.ZIP_DEFLATED)
+        for base, dirs, files in os.walk(import_dir):
+            for d in dirs:
+                dirs.remove(d)
+            for fn in fnmatch.filter(files, '*.csv'):
+                absfn = os.path.join(base, fn)
+                zfn = absfn[len(os.path.join(import_dir)):]
+                zip.write(absfn, zfn)
+        zip.close()
 
 
 # Submit import to canvas and record the import ID
@@ -96,8 +93,11 @@ def export_submit(export_id_file):
     params = {"parameters": {'terms':'1','courses':'1','sections':'1','enrollments':'1','users':'1','xlist':'1'}}
     params = json.dumps(params)
     request = urllib2.Request(endpoint,params,{'Content-type': 'application/json','Authorization':'Bearer %s' % access_token})
+    print(request)
     response = urllib2.urlopen(request).read().strip()
+    print(response)
     response_data = json.loads(response)
+    print(response_data)
     export_id = response_data['id']
 
     # Write export_id to text file for future reference
@@ -108,16 +108,10 @@ def export_submit(export_id_file):
 
 # Retrieve export and unzip it to the export directory
 def export_download(file_url,export_file):
-    headers = {'Authorization': 'Bearer %s' % access_token}
-    proxies = {
-            'https' :  'https://it-secproxy.jmu.edu:3128'
-    }
-
-    export_request = requests.get(file_url,headers=headers,proxies=proxies)
-
-    #export_data = urllib2.urlopen(file_url, context=ssl.ctx)
+    export_request = urllib2.Request(file_url,None,{'Authorization':'Bearer %s' % access_token})
+    export_data = urllib2.urlopen(file_url)
     with open(export_file, "wb+") as dl_file:
-        dl_file.write(export_request.content)
+        dl_file.write(export_data.read())
         zip_file = zipfile.ZipFile(dl_file, "r")
         for subfile in zip_file.namelist():
             print('downloading ' + subfile)

@@ -11,12 +11,12 @@ export_checkfile = export_dir + 'courses.csv'
 
 # Generate new export
 def generate_export():
-    api_canvas.export_submit(export_id_file)
+    #api_canvas.export_submit(export_id_file)
     export_id = int(open(export_id_file, 'r').read().strip())
-    progress = 0
-    while progress < 100:
-        time.sleep(60)
-        progress = api_canvas.job_status(export_id,'export')['progress']
+    #progress = 0
+    #while progress < 100:
+    #    time.sleep(60)
+    #    progress = api_canvas.job_status(export_id,'export')['progress']
     file_url = api_canvas.job_status(export_id,'export')['attachment']['url']
     try:
         api_canvas.export_download(file_url,export_file)

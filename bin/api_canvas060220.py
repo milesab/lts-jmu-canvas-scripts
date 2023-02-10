@@ -53,18 +53,15 @@ def import_clear(import_file,import_id_file):
 # Create a zip of the CSV files to import
 def import_zip(import_file,import_dir):
     if os.listdir(import_dir):
-		try:
-			zip = zipfile.ZipFile(import_file, 'w', zipfile.ZIP_DEFLATED)
-			for base, dirs, files in os.walk(import_dir):
-				for d in dirs:
-					dirs.remove(d)
-				for fn in fnmatch.filter(files, '*.csv'):
-					absfn = os.path.join(base, fn)
-					zfn = absfn[len(os.path.join(import_dir)):]
-					zip.write(absfn, zfn)
-			zip.close()
-		except:
-			pass		
+        zip = zipfile.ZipFile(import_file, 'w', zipfile.ZIP_DEFLATED)
+        for base, dirs, files in os.walk(import_dir):
+            for d in dirs:
+                dirs.remove(d)
+            for fn in fnmatch.filter(files, '*.csv'):
+                absfn = os.path.join(base, fn)
+                zfn = absfn[len(os.path.join(import_dir)):]
+                zip.write(absfn, zfn)
+        zip.close()
 
 
 # Submit import to canvas and record the import ID
@@ -109,11 +106,7 @@ def export_submit(export_id_file):
 # Retrieve export and unzip it to the export directory
 def export_download(file_url,export_file):
     headers = {'Authorization': 'Bearer %s' % access_token}
-    proxies = {
-            'https' :  'https://it-secproxy.jmu.edu:3128'
-    }
-
-    export_request = requests.get(file_url,headers=headers,proxies=proxies)
+    export_request = requests.get(file_url,headers=headers)
 
     #export_data = urllib2.urlopen(file_url, context=ssl.ctx)
     with open(export_file, "wb+") as dl_file:
