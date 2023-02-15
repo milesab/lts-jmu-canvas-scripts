@@ -1,7 +1,8 @@
 import csv
 
-input_file = r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\data\TRN FYR\FYR.csv'
-output_file = 'FYRraw.csv'  # name of the output file
+inputFromSA = r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\data\TRN FYR\FYR.csv'
+headersRemoved = r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\bin\FYR TRN\Data\FYRraw.csv'
+
 
 with open(input_file, newline='') as csvfile:
     reader = csv.reader(csvfile)
