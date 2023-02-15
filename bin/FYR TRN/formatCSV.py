@@ -3,13 +3,7 @@ import csv, time
 
 start_time = time.time()
 
-currentPath = Path(__file__).parent
-input_file = 'Data\FYR.csv'
-inputFromSA = (currentPath / input_file).resolve()
-
-print(inputFromSA)
-
-##inputFromSA = r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\bin\FYR TRN\Data\FYR.csv'
+inputFromSA = r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\bin\FYR TRN\Data\FYR.csv'
 formattedFYR = r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\bin\FYR TRN\Data\FYRformatted.csv'
 finalFYR = r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\bin\FYR TRN\Data\FYRcomplete.csv'
 
