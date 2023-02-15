@@ -1,8 +1,17 @@
+from pathlib import Path
 import csv, time
 
 start_time = time.time()
-    
-inputFromSA = r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\bin\FYR TRN\Data\FYR.csv'
+
+currentPath = Path(__file__).parent
+input_file = 'Data\FYR.csv'
+inputFromSA = (currentPath / input_file).resolve()
+
+print(inputFromSA)
+
+##inputFromSA = r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\bin\FYR TRN\Data\FYR.csv'
+formattedFYR = r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\bin\FYR TRN\Data\FYRformatted.csv'
+finalFYR = r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\bin\FYR TRN\Data\FYRcomplete.csv'
 
 # Read the FYR file supplied by SA
 with open(inputFromSA, 'r') as file:
@@ -17,15 +26,15 @@ for row in data:
     new_data.append(row)
 
 
-# Write the updated data to a new CSV file FYRFormatted
-with open(r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\bin\FYR TRN\Data\FYRformatted.csv', 'w', newline='') as file:
+# Write the data to a csv named FYRformatted that properly labels the headers
+with open(formattedFYR, 'w', newline='') as file:
     headers = ['course_id', 'user_id', 'role', 'section_id', 'status']
     writer = csv.DictWriter(file, fieldnames=headers)
     writer.writeheader()
     writer.writerows(new_data)
 
 # Read FYRFormatted
-with open(r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\bin\FYR TRN\Data\FYRformatted.csv', 'r') as file:
+with open(formattedFYR, 'r') as file:
     formattedData = list(csv.reader(file))
     
 # Add static values to columns
@@ -34,8 +43,8 @@ for row in formattedData:
     row[2] = 'student'   # static value for 'role'
     row[4] = 'active'    # static value for 'status'
     
-# Write values to a new csv
-with open(r'C:\Users\milesab\Documents\GitHub\lts-jmu-canvas-scripts\bin\FYR TRN\Data\FYRcomplete.csv', 'w', newline='') as file:
+# Write static values to FYRcomplete, ready to be uploaded
+with open(finalFYR, 'w', newline='') as file:
     writer = csv.writer(file)
     writer.writerows(formattedData)
     
